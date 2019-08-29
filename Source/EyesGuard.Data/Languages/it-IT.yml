@@ -77,9 +77,9 @@ Translation:
     OperationFailed: Operazione non riuscita
     CheckInput: Verifica la validità del dato.
     TimeManipulation:
-      HoursLimit: Il campo Ore non deve essere superiore a {Hours}
-      MinutesLimit: Il campo Minuti non deve essere superiore a  {Minutes}
-      SecondsLimit: Il campo Secondi non deve essere superiore a {Seconds}
+      HoursLimit: Il campo Ore non deve essere superiore a {0}
+      MinutesLimit: Il campo Minuti non deve essere superiore a  {0}
+      SecondsLimit: Il campo Secondi non deve essere superiore a {0}
       SGapMorethanLGap: La differenza tra due pause brevi deve essere inferiore a quella tra
         due pause lunghe.
       SDurationMorethanLDuration: La durata delle pause brevi deve essere inferiore a quella delle pause lunghe.
