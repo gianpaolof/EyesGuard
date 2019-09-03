@@ -82,9 +82,9 @@ Translation:
     OperationFailed: Operation failed
     CheckInput: Check input validiation.
     TimeManipulation:
-      HoursLimit: Hours field must not be more than {Hours}
-      MinutesLimit: Minutes field must not be more than {Minutes}
-      SecondsLimit: Seconds field must not be more than {Seconds}
+      HoursLimit: Hours field must not be more than {0}
+      MinutesLimit: Minutes field must not be more than {0}
+      SecondsLimit: Seconds field must not be more than {0}
       SGapMorethanLGap: Gap between two short-break must be smaller than the gap between
         two long-break.
       SDurationMorethanLDuration: Short-break duration must be smaller than long-break

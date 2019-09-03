@@ -23,6 +23,6 @@ namespace EyesGuard.AppManagers
 
         public StatsViewModel Stats { get; set; } = new StatsViewModel();
 
-        public CustomPauseViewModel CustomPause = new CustomPauseViewModel();
+        public CustomPauseViewModel CustomPause { get; set; } = new CustomPauseViewModel();
     }
 }

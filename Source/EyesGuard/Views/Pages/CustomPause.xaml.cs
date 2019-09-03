@@ -27,6 +27,7 @@ namespace EyesGuard.Views.Pages
         {
             InitializeComponent();
             DataContext = App.UIViewModels.CustomPause;
+            App.UIViewModels.CustomPause.OnLoad();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

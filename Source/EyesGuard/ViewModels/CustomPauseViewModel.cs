@@ -7,8 +7,14 @@ namespace EyesGuard.ViewModels
 {
     public class CustomPauseViewModel : ViewModelBase
     {
+        private  string hoursError = string.Empty; 
+        private  string minutsError = string.Empty;
+        private  string secondsError = string.Empty;
+        private  string chooseLargerTime = string.Empty;
+
         public CustomPauseViewModel()
         {
+ 
             SecondsCustomPause = "0";
             MinutesCustomPause = "15";
             HoursCustomPause = "1";
@@ -70,11 +76,7 @@ namespace EyesGuard.ViewModels
             return ret1 && ret2 && ret3;
         }
 
-        private static string hoursError = string.Format("» " + App.LocalizedEnvironment.Translation.EyesGuard.TimeManipulation.HoursLimit, 11);
-        private static string minutsError = string.Format("» " + App.LocalizedEnvironment.Translation.EyesGuard.TimeManipulation.MinutesLimit, 59);
-        private static string secondsError = string.Format("» " + App.LocalizedEnvironment.Translation.EyesGuard.TimeManipulation.SecondsLimit, 59);
-        private static string chooseLargerTime = string.Format("» " + App.LocalizedEnvironment.Translation.EyesGuard.TimeManipulation.ChooseLargerTime);
-
+        
         private string ValidateInput(int hours, int minutes, int seconds)
         {
             StringBuilder warning = new StringBuilder(string.Empty);
@@ -106,6 +108,15 @@ namespace EyesGuard.ViewModels
             }
 
             return warning.ToString();
+        }
+
+        public void OnLoad()
+        {
+            hoursError = string.Format("» " + App.LocalizedEnvironment.Translation.EyesGuard.TimeManipulation.HoursLimit, 11);
+            minutsError = string.Format("» " + App.LocalizedEnvironment.Translation.EyesGuard.TimeManipulation.MinutesLimit, 59);
+            secondsError = string.Format("» " + App.LocalizedEnvironment.Translation.EyesGuard.TimeManipulation.SecondsLimit, 59);
+            chooseLargerTime = string.Format("» " + App.LocalizedEnvironment.Translation.EyesGuard.TimeManipulation.ChooseLargerTime);
+
         }
     }
 }
