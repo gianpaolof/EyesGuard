@@ -80,6 +80,9 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsBase" />
+    <Reference Include="xunit.assert, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\xunit.assert.2.4.1\lib\netstandard1.1\xunit.assert.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -87,6 +90,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Extensions\DesignerExtensions.cs" />
+    <Compile Include="MEF\ExtensionMetadataAttribute.cs" />
+    <Compile Include="MEF\IContent.cs" />
+    <Compile Include="MEF\IContentMetadata.cs" />
+    <Compile Include="MEF\ViewContentLoader.cs" />
+    <Compile Include="ViewModels\Interfaces\IMainWindowViewModel.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\Animations\BlinkAnimations.cs" />
@@ -137,6 +146,9 @@
     </Compile>
     <Compile Include="Extensions\ResourceExtensions.cs" />
     <Compile Include="IdleDetector.cs" />
+    <Compile Include="MEF\GlobalContainer.cs" />
+    <Compile Include="MEF\Utils.cs" />
+    <Compile Include="Views\Windows\Interfaces\IShellView.cs" />
     <Compile Include="Views\Windows\LongBreakWindow.xaml.cs">
       <DependentUpon>LongBreakWindow.xaml</DependentUpon>
     </Compile>
@@ -175,6 +187,7 @@
     <Compile Include="Views\Menus\UserLoginMenu.xaml.cs">
       <DependentUpon>UserLoginMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MEF\MetadataConstants.cs" />
     <Compile Include="Views\Windows\ShortBreakWindow.xaml.cs">
       <DependentUpon>ShortBreakWindow.xaml</DependentUpon>
     </Compile>
@@ -342,6 +355,7 @@
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="EyesGuard_KEY_Sign.pfx" />
+    <None Include="packages.config" />
     <None Include="paket.references" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

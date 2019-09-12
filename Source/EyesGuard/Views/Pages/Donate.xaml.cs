@@ -1,26 +1,20 @@
-﻿using EyesGuard.Extensions;
-using System;
-using System.Collections.Generic;
+﻿using EyesGuard.MEF;
+using EyesGuard.Views.Windows;
+using System.ComponentModel.Composition;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace EyesGuard.Views.Pages
 {
     /// <summary>
     /// Interaction logic for Donate.xaml
     /// </summary>
-    public partial class Donate : Page
+    [Export(typeof(IContent))]
+    [ExtensionMetadata(MetadataConstants.DonatePage)]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public partial class Donate : Page, IContent
     {
         public Donate()
         {
@@ -45,6 +39,16 @@ namespace EyesGuard.Views.Pages
             App.ShowWarning(
                 $"{donateText.Thanks}\n{donateText.Redirect}\n\n{donateText.FeedbackNotice}"
                 , WarningPage.PageStates.Donate, new MainPage());
+        }
+
+        public void OnNavigatedFrom()
+        {
+            
+        }
+
+        public void OnNavigatedTo()
+        {
+           
         }
     }
 }

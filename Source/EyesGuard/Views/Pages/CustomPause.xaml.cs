@@ -1,33 +1,42 @@
-﻿using EyesGuard.Extensions;
-using EyesGuard.Localization;
+﻿using EyesGuard.MEF;
 using EyesGuard.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using EyesGuard.Views.Windows;
+using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace EyesGuard.Views.Pages
 {
     /// <summary>
     /// Interaction logic for CustomPause.xaml
     /// </summary>
-    public partial class CustomPause : Page
+    [Export(typeof(IContent))]
+    [ExtensionMetadata(MetadataConstants.CustomPause)]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public partial class CustomPause : Page , IContent, IPartImportsSatisfiedNotification
     {
         public CustomPause()
         {
             InitializeComponent();
-            DataContext = App.UIViewModels.CustomPause;
-            App.UIViewModels.CustomPause.OnLoad();
+        }
+
+        [Import]
+        private CustomPauseViewModel CustomPauseVM { get; set;}
+
+        public void OnImportsSatisfied()
+        {
+            DataContext = CustomPauseVM;
+        }
+
+        public void OnNavigatedFrom()
+        {
+           
+        }
+
+        public void OnNavigatedTo()
+        {
+            
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

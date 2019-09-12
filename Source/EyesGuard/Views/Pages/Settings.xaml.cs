@@ -1,25 +1,17 @@
-﻿using EyesGuard.Views.Animations;
-using EyesGuard.Extensions;
-using EyesGuard.Localization;
+﻿using EyesGuard.Extensions;
+using EyesGuard.MEF;
+using EyesGuard.Views.Animations;
 using EyesGuard.Views.Controls;
+using EyesGuard.Views.Windows;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Globalization;
+using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using static EyesGuard.Data.LanguageLoader;
 
 namespace EyesGuard.Views.Pages
@@ -27,7 +19,10 @@ namespace EyesGuard.Views.Pages
     /// <summary>
     /// Interaction logic for Settings.xaml
     /// </summary>
-    public partial class Settings : Page
+    [Export(typeof(IContent))]
+    [ExtensionMetadata(MetadataConstants.SettingsPage)]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public partial class Settings : Page, IContent
     {
         public Settings()
         {
@@ -345,6 +340,16 @@ namespace EyesGuard.Views.Pages
             {
                 ShortMessagesSource.Add(MessageContent.Text);
             }
+        }
+
+        public void OnNavigatedFrom()
+        {
+           
+        }
+
+        public void OnNavigatedTo()
+        {
+
         }
     }
 }

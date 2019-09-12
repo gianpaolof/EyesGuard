@@ -1,25 +1,19 @@
-﻿using EyesGuard.Extensions;
+﻿using EyesGuard.MEF;
 using EyesGuard.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using EyesGuard.Views.Windows;
+using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace EyesGuard.Views.Pages
 {
     /// <summary>
     /// Interaction logic for WarningPage.xaml
     /// </summary>
+    [Export(typeof(IContent))]
+    [ExtensionMetadata(MetadataConstants.WarningPage)]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class WarningPage : Page
     {
         public enum PageStates
@@ -118,7 +112,7 @@ namespace EyesGuard.Views.Pages
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            App.GetMainWindow().MainFrame.Navigate(ReturnPage);
+            Utils.GetMainWindow().MainFrame.Navigate(ReturnPage);
         }
     }
 }

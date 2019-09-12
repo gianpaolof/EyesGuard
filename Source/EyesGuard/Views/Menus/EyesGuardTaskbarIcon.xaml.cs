@@ -1,11 +1,8 @@
 ﻿using EyesGuard.AppManagers;
+using EyesGuard.MEF;
 using EyesGuard.Views.Pages;
-using EyesGuard.ViewModels;
+using EyesGuard.Views.Windows;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace EyesGuard.Views.Menus
@@ -14,7 +11,7 @@ namespace EyesGuard.Views.Menus
     {
         private void TaskbarIcon_TrayMouseDoubleClick(object sender, System.Windows.RoutedEventArgs e)
         {
-            if(!App.GetMainWindow().IsVisible)
+            if(!Utils.GetMainWindow().IsVisible)
             ChromeManager.Show();
         }
 
@@ -45,9 +42,11 @@ namespace EyesGuard.Views.Menus
 
         private void CustomPause_Click(object sender, RoutedEventArgs e)
         {
-            App.GetMainWindow().MainFrame.Navigate(new CustomPause());
+            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
 
-            if (!App.GetMainWindow().IsVisible)
+            Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.CustomPause);
+
+            if (!Utils.GetMainWindow().IsVisible)
                 ChromeManager.Show();
         }
 
@@ -85,9 +84,11 @@ namespace EyesGuard.Views.Menus
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            App.GetMainWindow().MainFrame.Navigate(new Settings());
+            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
 
-            if (!App.GetMainWindow().IsVisible)
+            Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.SettingsPage);
+
+            if (!Utils.GetMainWindow().IsVisible)
                 ChromeManager.Show();
         }
     }

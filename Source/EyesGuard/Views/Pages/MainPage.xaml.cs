@@ -1,19 +1,10 @@
-﻿using EyesGuard.Views.Animations;
-using EyesGuard.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EyesGuard.MEF;
+using EyesGuard.Views.Animations;
+using EyesGuard.Views.Windows;
+using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using static EyesGuard.App;
 
 namespace EyesGuard.Views.Pages
@@ -21,7 +12,10 @@ namespace EyesGuard.Views.Pages
     /// <summary>
     /// Interaction logic for MainPage.xaml
     /// </summary>
-    public partial class MainPage : Page
+    [Export(typeof(IContent))]
+    [ExtensionMetadata(MetadataConstants.MainPage)]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public partial class MainPage : Page, IContent
     {
         public GuardStates ProtectionState
         {
@@ -104,6 +98,16 @@ namespace EyesGuard.Views.Pages
                     uie.ShowUsingLinearAnimationAsync();
                 }
             }
+        }
+
+        public void OnNavigatedFrom()
+        {
+            
+        }
+
+        public void OnNavigatedTo()
+        {
+           
         }
     }
 }

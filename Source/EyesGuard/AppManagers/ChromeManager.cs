@@ -1,4 +1,8 @@
-﻿using EyesGuard.Views.Animations;
+﻿using EyesGuard.MEF;
+using EyesGuard.ViewModels.Interfaces;
+using EyesGuard.Views;
+using EyesGuard.Views.Animations;
+using EyesGuard.Views.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +19,11 @@ namespace EyesGuard.AppManagers
         {
             if (!_hiding)
             {
+                IMainWindowViewModel vm = GlobalMEFContainer.Instance.GetExport<IMainWindowViewModel>();
+                MainWindow v = vm.GetShell().GetMainWindow();
                 _hiding = true;
-                await App.GetMainWindow().HideUsingLinearAnimationAsync();
-                App.GetMainWindow().Hide();
+                await v.HideUsingLinearAnimationAsync();
+                v.Hide();
                 _hiding = false;
             }
         }
@@ -29,8 +35,10 @@ namespace EyesGuard.AppManagers
             if (!_closing)
             {
                 _closing = true;
-                await App.GetMainWindow().HideUsingLinearAnimationAsync(200);
-                App.GetMainWindow().Close();
+                IMainWindowViewModel vm = GlobalMEFContainer.Instance.GetExport<IMainWindowViewModel>();
+                MainWindow v = vm.GetShell().GetMainWindow();
+                await v.HideUsingLinearAnimationAsync(200);
+                v.Close();
                 _closing = false;
             }
         }
@@ -42,10 +50,12 @@ namespace EyesGuard.AppManagers
             if (!_showing)
             {
                 _showing = true;
-                App.GetMainWindow().Show();
-                await App.GetMainWindow().ShowUsingLinearAnimationAsync();
-                App.GetMainWindow().Show();
-                App.GetMainWindow().BringIntoView();
+                IMainWindowViewModel vm = GlobalMEFContainer.Instance.GetExport<IMainWindowViewModel>();
+                MainWindow v = vm.GetShell().GetMainWindow();
+                v.Show();
+                await v.ShowUsingLinearAnimationAsync();
+                v.Show();
+                v.BringIntoView();
                 _showing = false;
             }
         }

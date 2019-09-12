@@ -1,28 +1,22 @@
-﻿using EyesGuard.Views.Animations;
-using EyesGuard.AppManagers;
+﻿using EyesGuard.AppManagers;
 using EyesGuard.Configurations;
-using EyesGuard.Extensions;
+using EyesGuard.MEF;
+using EyesGuard.Views.Animations;
 using EyesGuard.Views.Pages;
+using EyesGuard.Views.Windows.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace EyesGuard.Views.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    [Export(typeof(IShellView))]
+    public partial class MainWindow : Window, IShellView
     {
         public MainWindow()
         {
@@ -30,6 +24,11 @@ namespace EyesGuard.Views.Windows
 
             if (App.LaunchMinimized)
                 this.Hide();
+        }
+
+        public MainWindow GetMainWindow()
+        {
+            return this;
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -86,7 +85,9 @@ namespace EyesGuard.Views.Windows
 
         private void Title_Click(object sender, RoutedEventArgs e)
         {
-            App.GetMainWindow().MainFrame.Navigate(new MainPage());
+            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
+
+            Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.MainPage);
         }
     }
 }

@@ -1,28 +1,18 @@
-﻿using EyesGuard.Views.Animations;
-using EyesGuard.AppManagers;
-using EyesGuard.Extensions;
+﻿using EyesGuard.AppManagers;
+using EyesGuard.MEF;
+using EyesGuard.Views.Animations;
 using EyesGuard.Views.Pages;
+using EyesGuard.Views.Windows;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace EyesGuard.Views.Menus
 {
     public partial class HeaderMenu : UserControl
     {
+        
+
         public HeaderMenu()
         {
             InitializeComponent();
@@ -32,7 +22,9 @@ namespace EyesGuard.Views.Menus
 
         private void GoToStatictictsPage_Click(object sender, RoutedEventArgs e)
         {
-            App.GetMainWindow().MainFrame.Navigate(new Statistics());
+            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
+
+            Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.StatisticsPage);
         }
 
         private void GoToEyeSightImprove_Click(object sender, RoutedEventArgs e)
@@ -41,12 +33,16 @@ namespace EyesGuard.Views.Menus
 
         private void GoToSettingsPage_Click(object sender, RoutedEventArgs e)
         {
-            App.GetMainWindow().MainFrame.Navigate(new Settings());
+            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
+
+            Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.SettingsPage);
         }
 
         private void GoToMainPage_Click(object sender, RoutedEventArgs e)
         {
-            App.GetMainWindow().MainFrame.Navigate(new MainPage());
+            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
+
+            Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.MainPage);
         }
 
         private void ShowHideTimeRemaining_Click(object sender, RoutedEventArgs e)
@@ -82,12 +78,14 @@ namespace EyesGuard.Views.Menus
 
         private void CustomPause_Click(object sender, RoutedEventArgs e)
         {
-            App.GetMainWindow().MainFrame.Navigate(new CustomPause());
+            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
+
+            Utils.GetMainWindow().MainFrame.Content = vc.GetView (MetadataConstants.CustomPause);
         }
 
         private async void ApplicationExit_Click(object sender, RoutedEventArgs e)
         {
-            await App.GetMainWindow().HideUsingLinearAnimationAsync();
+            await Utils.GetMainWindow().HideUsingLinearAnimationAsync();
             App.Current.Shutdown();
         }
 
@@ -139,7 +137,9 @@ namespace EyesGuard.Views.Menus
 
         private void Donate_Click(object sender, RoutedEventArgs e)
         {
-            App.GetMainWindow().MainFrame.Navigate(new Donate());
+            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
+
+            Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.DonatePage);
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -148,7 +148,9 @@ namespace EyesGuard.Views.Menus
 
         private void Feedback_Menu_Click(object sender, RoutedEventArgs e)
         {
-            App.GetMainWindow().MainFrame.Navigate(new FeedbackPage());
+            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
+
+            Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.FeedbackPage);
         }
     }
 }

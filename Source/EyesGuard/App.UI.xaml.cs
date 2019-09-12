@@ -1,9 +1,5 @@
-﻿using EyesGuard.Views.Pages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EyesGuard.MEF;
+using EyesGuard.Views.Pages;
 using System.Windows.Controls;
 
 namespace EyesGuard
@@ -20,8 +16,9 @@ namespace EyesGuard
         {
             try
             {
-                navPage = navPage ?? (Page)GetMainWindow().MainFrame.Content;
-                GetMainWindow().MainFrame.Navigate(new WarningPage(navPage, message, state, pageTitle));
+                navPage = navPage ?? (Page)Utils.GetMainWindow().MainFrame.Content;
+
+                Utils.GetMainWindow().MainFrame.Navigate(new WarningPage(navPage, message, state, pageTitle));
             }
             catch { }
         }

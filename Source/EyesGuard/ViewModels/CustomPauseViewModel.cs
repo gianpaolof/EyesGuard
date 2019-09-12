@@ -1,10 +1,15 @@
-﻿using EyesGuard.Views.Pages;
+﻿using EyesGuard.MEF;
+using EyesGuard.Views;
+using EyesGuard.Views.Pages;
+using EyesGuard.Views.Windows;
 using System;
+using System.ComponentModel.Composition;
 using System.Text;
 using System.Windows.Input;
 
 namespace EyesGuard.ViewModels
 {
+    [Export]
     public class CustomPauseViewModel : ViewModelBase
     {
         private  string hoursError = string.Empty; 
@@ -12,6 +17,7 @@ namespace EyesGuard.ViewModels
         private  string secondsError = string.Empty;
         private  string chooseLargerTime = string.Empty;
 
+        [ImportingConstructor]
         public CustomPauseViewModel()
         {
  
@@ -19,6 +25,7 @@ namespace EyesGuard.ViewModels
             MinutesCustomPause = "15";
             HoursCustomPause = "1";
             PauseProtection = new RelayCommand(() => DoCustomPause());
+            InitTexts();
         }
 
 
@@ -62,8 +69,11 @@ namespace EyesGuard.ViewModels
                 }
 
              App.PauseProtection(new TimeSpan(hours, minutes, seconds));
-             App.GetMainWindow().MainFrame.Navigate(new MainPage());
-             return;
+
+            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
+
+            Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.MainPage);
+            return;
 
         }
 
@@ -110,7 +120,10 @@ namespace EyesGuard.ViewModels
             return warning.ToString();
         }
 
-        public void OnLoad()
+        /// <summary>
+        /// This is needed because the LocalizedEnvironment is loaded at run time, it's not static like resx
+        /// </summary>
+        private void InitTexts()
         {
             hoursError = string.Format("» " + App.LocalizedEnvironment.Translation.EyesGuard.TimeManipulation.HoursLimit, 11);
             minutsError = string.Format("» " + App.LocalizedEnvironment.Translation.EyesGuard.TimeManipulation.MinutesLimit, 59);
