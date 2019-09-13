@@ -1,12 +1,11 @@
-﻿using EyesGuard.Views.Animations;
+﻿using EyesGuard.MEF;
+using EyesGuard.ViewModels.Interfaces;
+using EyesGuard.Views.Animations;
 using EyesGuard.Views.Pages;
-using EyesGuard.Views.Windows;
+using EyesGuard.Views.Windows.Interfaces;
 using FormatWith;
 using Hardcodet.Wpf.TaskbarNotification;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -22,8 +21,10 @@ namespace EyesGuard
         /// <returns></returns>
         public static bool CheckIfResting(bool showWarning = true)
         {
-            if (App.CurrentShortBreakWindow != null
-                || App.CurrentLongBreakWindow != null)
+            IShortBreakShellView sv = GlobalMEFContainer.Instance.GetExport<IShortBreakShellView>();
+            ILongBreakShellView lv = GlobalMEFContainer.Instance.GetExport<ILongBreakShellView>();
+
+            if (sv != null || lv != null)
             {
                 if (showWarning)
                     App.ShowWarning(App.LocalizedEnvironment.Translation.EyesGuard.WaitUnitlEndOfBreak, WarningPage.PageStates.Warning);
@@ -72,19 +73,22 @@ namespace EyesGuard
 
             NextShortBreak = App.Configuration.ShortBreakGap;
             ShortBreakShownOnce = true;
-            var shortWindow = new ShortBreakWindow()
-            {
-                DataContext = UIViewModels.ShortBreak
-            };
+
+            IShortBreakViewModel vm = GlobalMEFContainer.Instance.GetExport<IShortBreakViewModel>();
+            vm.TimeRemaining = ((int)ShortBreakVisibleTime.TotalSeconds).ToString();
+            vm.ShortMessage = GetShortWindowMessage();
+
+            IShortBreakShellView v = GlobalMEFContainer.Instance.GetExport<IShortBreakShellView>();
+            v.DataContext = vm;
+
             ShortBreakVisibleTime = App.Configuration.ShortBreakDuration;
-            UIViewModels.ShortBreak.TimeRemaining = ((int)ShortBreakVisibleTime.TotalSeconds).ToString();
-            UIViewModels.ShortBreak.ShortMessage = GetShortWindowMessage();
+
             try
             {
-                await shortWindow.ShowUsingLinearAnimationAsync();
-                shortWindow.Show();
-                shortWindow.BringIntoView();
-                shortWindow.Focus();
+                await v.GetWindow().ShowUsingLinearAnimationAsync();
+                v.Show();
+                v.BringIntoView();
+                v.Focus();
             }
             catch { }
 
@@ -115,6 +119,8 @@ namespace EyesGuard
 
         public async void StartLongBreak()
         {
+            IShortBreakShellView v = GlobalMEFContainer.Instance.GetExport<IShortBreakShellView>();
+            ILongBreakShellView lv = GlobalMEFContainer.Instance.GetExport<ILongBreakShellView>();
             ShortBreakHandler.Stop();
             LongBreakHandler.Stop();
             UIViewModels.HeaderMenu.ManualBreakEnabled = false;
@@ -124,32 +130,31 @@ namespace EyesGuard
             NextShortBreak = App.Configuration.ShortBreakGap;
             NextLongBreak = App.Configuration.LongBreakGap;
 
-            var longWindow = new LongBreakWindow()
+            ILongBreakViewModel vm = GlobalMEFContainer.Instance.GetExport<ILongBreakViewModel>();
+            vm.TimeRemaining = LocalizedEnvironment.Translation.EyesGuard.LongBreakTimeRemaining.FormatWith(new
             {
-                DataContext = UIViewModels.LongBreak
-            };
+                LongBreakVisibleTime.Hours,
+                LongBreakVisibleTime.Minutes,
+                LongBreakVisibleTime.Seconds
+            });
+            vm.CanCancel =  (Configuration.ForceUserToBreak) ? Visibility.Collapsed : Visibility.Visible;
+
+            
+            lv.DataContext = vm;
+
             LongBreakVisibleTime = App.Configuration.LongBreakDuration;
-            UIViewModels.LongBreak.TimeRemaining =
-                LocalizedEnvironment.Translation.EyesGuard.LongBreakTimeRemaining.FormatWith(new
-                {
-                    LongBreakVisibleTime.Hours,
-                    LongBreakVisibleTime.Minutes,
-                    LongBreakVisibleTime.Seconds
-                });
 
-            UIViewModels.LongBreak.CanCancel = (Configuration.ForceUserToBreak) ? Visibility.Collapsed : Visibility.Visible;
-
-            if (CurrentShortBreakWindow != null)
+            if (v != null)
             {
-                ((ShortBreakWindow)CurrentShortBreakWindow).LetItClose = true;
-                CurrentShortBreakWindow.Close();
-                CurrentShortBreakWindow = null;
+                v.LetItClose = true;
+                v.Close();
+                //v = null;
             }
             ShortDurationCounter.Stop();
-            await longWindow.ShowUsingLinearAnimationAsync();
-            longWindow.Show();
-            longWindow.BringIntoView();
-            longWindow.Focus();
+            await lv.GetWindow().ShowUsingLinearAnimationAsync();
+            lv.Show();
+            lv.BringIntoView();
+            lv.Focus();
 
             LongDurationCounter.Start();
         }
@@ -161,7 +166,8 @@ namespace EyesGuard
         private void ShortDurationCounter_Tick(object sender, EventArgs e)
         {
             ShortBreakVisibleTime = ShortBreakVisibleTime.Subtract(TimeSpan.FromSeconds(1));
-            UIViewModels.ShortBreak.TimeRemaining = ((int)ShortBreakVisibleTime.TotalSeconds).ToString();
+            IShortBreakViewModel vm = GlobalMEFContainer.Instance.GetExport<IShortBreakViewModel>();
+            vm.TimeRemaining = ((int)ShortBreakVisibleTime.TotalSeconds).ToString();
             if ((int)ShortBreakVisibleTime.TotalSeconds == 0)
             {
                 EndShortBreak();
@@ -179,12 +185,14 @@ namespace EyesGuard
             UIViewModels.ShortLongBreakTimeRemaining.NextShortBreak = LocalizedEnvironment.Translation.EyesGuard.Waiting;
             UIViewModels.NotifyIcon.NextShortBreak = LocalizedEnvironment.Translation.EyesGuard.Waiting;
 
-            await CurrentShortBreakWindow.HideUsingLinearAnimationAsync();
-            if (CurrentShortBreakWindow != null)
+            IShortBreakShellView v = GlobalMEFContainer.Instance.GetExport<IShortBreakShellView>();
+
+            await v.GetWindow().HideUsingLinearAnimationAsync();
+            if (v != null)
             {
-                ((ShortBreakWindow)CurrentShortBreakWindow).LetItClose = true;
-                CurrentShortBreakWindow.Close();
-                CurrentShortBreakWindow = null;
+                v.LetItClose = true;
+                v.Close();
+                //v = null;
             }
             if (!App.Configuration.OnlyOneShortBreak && Configuration.ProtectionState == GuardStates.Protecting)
             {
@@ -199,8 +207,8 @@ namespace EyesGuard
         private async void LongDurationCounter_Tick(object sender, EventArgs e)
         {
             LongBreakVisibleTime = LongBreakVisibleTime.Subtract(TimeSpan.FromSeconds(1));
-            UIViewModels.LongBreak.TimeRemaining =
-                LocalizedEnvironment.Translation.EyesGuard.LongBreakTimeRemaining.FormatWith(new
+            ILongBreakViewModel vm = GlobalMEFContainer.Instance.GetExport<ILongBreakViewModel>();
+            vm.TimeRemaining =LocalizedEnvironment.Translation.EyesGuard.LongBreakTimeRemaining.FormatWith(new
                 {
                     LongBreakVisibleTime.Hours,
                     LongBreakVisibleTime.Minutes,
@@ -215,15 +223,15 @@ namespace EyesGuard
 
         private async Task EndLongBreak()
         {
-            ((LongBreakWindow)CurrentLongBreakWindow).LetItClose = true;
+            ILongBreakShellView lv = GlobalMEFContainer.Instance.GetExport<ILongBreakShellView>();
+            lv.LetItClose = true;
             if (Configuration.SaveStats)
             {
                 Configuration.LongBreaksCompleted++;
                 UpdateStats();
             }
-            await CurrentLongBreakWindow.HideUsingLinearAnimationAsync();
-            CurrentLongBreakWindow.Close();
-            CurrentLongBreakWindow = null;
+            await lv.GetWindow().HideUsingLinearAnimationAsync();
+            lv.Close();
             ShortBreakShownOnce = false;
             if (Configuration.ProtectionState == GuardStates.Protecting)
             {

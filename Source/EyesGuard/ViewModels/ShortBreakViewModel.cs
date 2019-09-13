@@ -1,6 +1,10 @@
-﻿namespace EyesGuard.ViewModels
+﻿using EyesGuard.ViewModels.Interfaces;
+using System.ComponentModel.Composition;
+
+namespace EyesGuard.ViewModels
 {
-    public class ShortBreakViewModel : ViewModelBase
+    [Export(typeof(IShortBreakViewModel))]
+    public class ShortBreakViewModel : ViewModelBase, IShortBreakViewModel
     {
         public ShortBreakViewModel()
         {
@@ -19,6 +23,5 @@
             get { return GetValue(() => TimeRemaining); }
             set { SetValue(() => TimeRemaining, value); }
         }
-    
     }
 }

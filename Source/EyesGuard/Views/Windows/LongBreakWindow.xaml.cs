@@ -1,4 +1,6 @@
 ﻿using EyesGuard.Views.Animations;
+using EyesGuard.Views.Windows.Interfaces;
+using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Input;
 using static EyesGuard.App;
@@ -8,11 +10,11 @@ namespace EyesGuard.Views.Windows
     /// <summary>
     /// Interaction logic for LongBreakWindow.xaml
     /// </summary>
-    public partial class LongBreakWindow : Window
+    [Export(typeof(ILongBreakShellView))]
+    public partial class LongBreakWindow : Window, ILongBreakShellView
     {
         public LongBreakWindow()
         {
-            App.CurrentLongBreakWindow = this;
             InitializeComponent();
         }
 
@@ -28,9 +30,8 @@ namespace EyesGuard.Views.Windows
                     App.Configuration.LongBreaksFailed++;
                     App.Configuration.SaveSettingsToFile();
                 }
-                await App.CurrentLongBreakWindow.HideUsingLinearAnimationAsync();
-                App.CurrentLongBreakWindow.Close();
-                App.CurrentLongBreakWindow = null;
+                await (this as Window).HideUsingLinearAnimationAsync();
+                Close();
                 App.ShortBreakShownOnce = false;
                 if (App.Configuration.ProtectionState == GuardStates.Protecting)
                 {
@@ -41,6 +42,11 @@ namespace EyesGuard.Views.Windows
                 App.UIViewModels.HeaderMenu.ManualBreakEnabled = true;
             }
             catch { }
+        }
+
+        public Window GetWindow()
+        {
+            return this;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -54,5 +60,6 @@ namespace EyesGuard.Views.Windows
             if (App.Configuration.ForceUserToBreak)
                 Cursor = Cursors.None;
         }
+
     }
 }

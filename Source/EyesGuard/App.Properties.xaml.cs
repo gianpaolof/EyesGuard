@@ -64,9 +64,6 @@ namespace EyesGuard
         public static DispatcherTimer ShortDurationCounter { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
         public static DispatcherTimer LongDurationCounter { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
 
-        public static Window CurrentShortBreakWindow { get; set; } = null;
-        public static Window CurrentLongBreakWindow { get; set; } = null;
-
         public static UIViewModels UIViewModels { get; } = new UIViewModels();
 
         public bool BasePrequirementsLoaded { get; private set; } = false;

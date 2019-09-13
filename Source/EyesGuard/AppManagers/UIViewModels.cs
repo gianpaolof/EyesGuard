@@ -16,13 +16,7 @@ namespace EyesGuard.AppManagers
 
         public NotifyIconViewModel NotifyIcon { get; set; } = new NotifyIconViewModel();
 
-        public ShortBreakViewModel ShortBreak { get; set; } = new ShortBreakViewModel();
-
-        public LongBreakWindowViewModel LongBreak { get; set; }
-            = new LongBreakWindowViewModel();
 
         public StatsViewModel Stats { get; set; } = new StatsViewModel();
-
-        //public CustomPauseViewModel CustomPause { get; set; } = new CustomPauseViewModel();
     }
 }

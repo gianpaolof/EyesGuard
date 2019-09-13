@@ -1,8 +1,11 @@
-﻿using System.Windows;
+﻿using EyesGuard.ViewModels.Interfaces;
+using System.ComponentModel.Composition;
+using System.Windows;
 
 namespace EyesGuard.ViewModels
 {
-    public class LongBreakWindowViewModel : ViewModelBase
+    [Export(typeof(ILongBreakViewModel))]
+    public class LongBreakWindowViewModel : ViewModelBase, ILongBreakViewModel
     {
         public LongBreakWindowViewModel()
         {

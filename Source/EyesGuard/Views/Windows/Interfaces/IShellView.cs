@@ -4,6 +4,5 @@
     {
         void Show();
         MainWindow GetMainWindow();
-        //IMenu Menu { get; }
     }
 }

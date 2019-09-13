@@ -124,6 +124,8 @@ namespace EyesGuard
             var vcl = new ViewContentLoader();
             cc.ComposeParts(vcl);
 
+            //DumpMEF.Dump(path);
+
             GlobalMEFContainer.Instance.AddViewContentLoader(vcl);
             GlobalMEFContainer.Instance.AddContainer(c);
         }

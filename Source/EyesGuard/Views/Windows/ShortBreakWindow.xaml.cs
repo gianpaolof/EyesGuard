@@ -1,19 +1,29 @@
-﻿using System.Windows;
+﻿using EyesGuard.ViewModels;
+using EyesGuard.Views.Windows.Interfaces;
+using System.ComponentModel.Composition;
+using System.Windows;
 
 namespace EyesGuard.Views.Windows
 {
     /// <summary>
     /// Interaction logic for ShortBreakWindow.xaml
     /// </summary>
-    public partial class ShortBreakWindow : Window
+    [Export(typeof(IShortBreakShellView))]
+    public partial class ShortBreakWindow : Window, IShortBreakShellView
     {
         public ShortBreakWindow()
         {
-            App.CurrentShortBreakWindow = this;
             InitializeComponent();
+
+
         }
 
         public bool LetItClose { get; set; } = false;
+
+        public Window GetWindow()
+        {
+            return this;
+        }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
