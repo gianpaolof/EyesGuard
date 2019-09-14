@@ -8,7 +8,7 @@ namespace EyesGuard.Views.Windows
     /// <summary>
     /// Interaction logic for ShortBreakWindow.xaml
     /// </summary>
-    [Export(typeof(IShortBreakShellView))]
+    [Export(typeof(IShortBreakShellView)), PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class ShortBreakWindow : Window, IShortBreakShellView
     {
         public ShortBreakWindow()

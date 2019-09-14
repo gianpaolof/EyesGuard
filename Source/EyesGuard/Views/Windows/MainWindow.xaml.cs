@@ -15,7 +15,7 @@ namespace EyesGuard.Views.Windows
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    [Export(typeof(IShellView))]
+    [Export(typeof(IShellView)),PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class MainWindow : Window, IShellView
     {
         public MainWindow()
