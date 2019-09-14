@@ -131,6 +131,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Extensions\DesignerExtensions.cs" />
+    <Compile Include="Logic\ObservableObject.cs" />
+    <Compile Include="Logic\Ticker.cs" />
     <Compile Include="MEF\DumpMEF.cs" />
     <Compile Include="MEF\ExtensionMetadataAttribute.cs" />
     <Compile Include="MEF\IContent.cs" />

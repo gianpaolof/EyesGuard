@@ -148,7 +148,7 @@ namespace EyesGuard
             {
                 v.LetItClose = true;
                 v.Close();
-                //v = null;
+                v = null;
             }
             ShortDurationCounter.Stop();
             await lv.GetWindow().ShowUsingLinearAnimationAsync();
@@ -192,7 +192,7 @@ namespace EyesGuard
             {
                 v.LetItClose = true;
                 v.Close();
-                //v = null;
+                v = null;
             }
             if (!App.Configuration.OnlyOneShortBreak && Configuration.ProtectionState == GuardStates.Protecting)
             {

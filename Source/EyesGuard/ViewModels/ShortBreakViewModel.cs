@@ -1,4 +1,5 @@
-﻿using EyesGuard.ViewModels.Interfaces;
+﻿using EyesGuard.Logic;
+using EyesGuard.ViewModels.Interfaces;
 using System.ComponentModel.Composition;
 
 namespace EyesGuard.ViewModels
@@ -8,6 +9,7 @@ namespace EyesGuard.ViewModels
     {
         public ShortBreakViewModel()
         {
+            //Ticker t = new Ticker();
             ShortMessage = string.Empty; ;
             TimeRemaining = string.Empty; ;
         }
