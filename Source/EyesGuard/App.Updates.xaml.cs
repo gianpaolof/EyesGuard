@@ -137,24 +137,27 @@ namespace EyesGuard
             {
                 Configuration.PauseCount++;
                 Configuration.SaveSettingsToFile();
-                UIViewModels.Stats.PauseCount = Configuration.PauseCount;
+                IStatsViewModel stats = GlobalMEFContainer.Instance.GetExport<IStatsViewModel>();
+                stats.PauseCount = Configuration.PauseCount;
             }
             else if (state == GuardStates.NotProtecting)
             {
                 Configuration.StopCount++;
                 Configuration.SaveSettingsToFile();
-                UIViewModels.Stats.StopCount = Configuration.StopCount;
+                IStatsViewModel stats = GlobalMEFContainer.Instance.GetExport<IStatsViewModel>();
+                stats.StopCount = Configuration.StopCount;
             }
         }
 
         public static void UpdateStats()
         {
             Configuration.SaveSettingsToFile();
-            UIViewModels.Stats.ShortCount = Configuration.ShortBreaksCompleted;
-            UIViewModels.Stats.LongCompletedCount = Configuration.LongBreaksCompleted;
-            UIViewModels.Stats.LongFailedCount = Configuration.LongBreaksFailed;
-            UIViewModels.Stats.PauseCount = Configuration.PauseCount;
-            UIViewModels.Stats.StopCount = Configuration.StopCount;
+            IStatsViewModel stats = GlobalMEFContainer.Instance.GetExport<IStatsViewModel>();
+            stats.ShortCount = Configuration.ShortBreaksCompleted;
+            stats.LongCompletedCount = Configuration.LongBreaksCompleted;
+            stats.LongFailedCount = Configuration.LongBreaksFailed;
+            stats.PauseCount = Configuration.PauseCount;
+            stats.StopCount = Configuration.StopCount;
         }
     }
 }

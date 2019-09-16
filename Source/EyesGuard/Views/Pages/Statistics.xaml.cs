@@ -1,4 +1,5 @@
 ﻿using EyesGuard.MEF;
+using EyesGuard.ViewModels.Interfaces;
 using EyesGuard.Views.Windows;
 using System.ComponentModel.Composition;
 using System.Windows;
@@ -11,14 +12,15 @@ namespace EyesGuard.Views.Pages
     /// Interaction logic for Statistics.xaml
     /// </summary>
     [Export(typeof(IContent))]
-    [ExtensionMetadata(MetadataConstants.SettingsPage)]
+    [ExtensionMetadata(MetadataConstants.StatisticsPage)]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class Statistics : Page, IContent
     {
-        public Statistics()
+        [ImportingConstructor]
+        public Statistics(IStatsViewModel vm)
         {
             InitializeComponent();
-            DataContext = App.UIViewModels.Stats;
+            DataContext = vm;
         }
 
         public void OnNavigatedFrom()

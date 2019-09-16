@@ -9,13 +9,8 @@ namespace EyesGuard.AppManagers
 {
     public class UIViewModels
     {
-
-
         public HeaderMenuViewModel HeaderMenu { get; set; } = new HeaderMenuViewModel();
 
         public NotifyIconViewModel NotifyIcon { get; set; } = new NotifyIconViewModel();
-
-
-        public StatsViewModel Stats { get; set; } = new StatsViewModel();
     }
 }

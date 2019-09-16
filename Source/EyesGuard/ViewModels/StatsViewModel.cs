@@ -1,6 +1,10 @@
-﻿namespace EyesGuard.ViewModels
+﻿using EyesGuard.ViewModels.Interfaces;
+using System.ComponentModel.Composition;
+
+namespace EyesGuard.ViewModels
 {
-    public class StatsViewModel : ViewModelBase
+    [Export(typeof(IStatsViewModel))]
+    public class StatsViewModel : ViewModelBase, IStatsViewModel
     {
         public long ShortCount
         {
