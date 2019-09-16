@@ -9,8 +9,7 @@ namespace EyesGuard.AppManagers
 {
     public class UIViewModels
     {
-        public ShortLongBreakTimeRemainingViewModel ShortLongBreakTimeRemaining { get; set; }
-            = new ShortLongBreakTimeRemainingViewModel();
+
 
         public HeaderMenuViewModel HeaderMenu { get; set; } = new HeaderMenuViewModel();
 

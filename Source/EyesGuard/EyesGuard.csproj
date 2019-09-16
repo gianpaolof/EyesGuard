@@ -141,6 +141,7 @@
     <Compile Include="ViewModels\Interfaces\ILongBreakViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IMainWindowViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IShortBreakViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IShortLongBreakTimeRemainingViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />

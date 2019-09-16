@@ -1,8 +1,11 @@
-﻿using System.Windows;
+﻿using EyesGuard.ViewModels.Interfaces;
+using System.ComponentModel.Composition;
+using System.Windows;
 
 namespace EyesGuard.ViewModels
 {
-    public class ShortLongBreakTimeRemainingViewModel : ViewModelBase
+    [Export(typeof(IShortLongBreakTimeRemainingViewModel))]
+    public class ShortLongBreakTimeRemainingViewModel : ViewModelBase, IShortLongBreakTimeRemainingViewModel
     {
         public ShortLongBreakTimeRemainingViewModel()
         {

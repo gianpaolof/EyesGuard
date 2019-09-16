@@ -1,13 +1,9 @@
-﻿using EyesGuard.Data;
-using EyesGuard.Extensions;
-using EyesGuard.Localization;
+﻿using EyesGuard.Extensions;
+using EyesGuard.MEF;
+using EyesGuard.ViewModels.Interfaces;
 using Hardcodet.Wpf.TaskbarNotification;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using static EyesGuard.Data.LanguageLoader;
@@ -171,9 +167,8 @@ namespace EyesGuard
         public static void UpdateIdleActions()
         {
             if (CheckIfResting(showWarning: false)) return;
-
-            UIViewModels.ShortLongBreakTimeRemaining.IdleVisibility =
-                (AppIsInIdleState) ? Visibility.Visible : Visibility.Collapsed;
+            IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+            slbt.IdleVisibility = (AppIsInIdleState) ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }

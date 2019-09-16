@@ -68,7 +68,8 @@ namespace EyesGuard
             LongBreakHandler.Stop();
 
             UIViewModels.HeaderMenu.ManualBreakEnabled = false;
-            UIViewModels.ShortLongBreakTimeRemaining.NextShortBreak = App.LocalizedEnvironment.Translation.EyesGuard.Resting;
+            IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+            slbt.NextShortBreak = App.LocalizedEnvironment.Translation.EyesGuard.Resting;
             UIViewModels.NotifyIcon.NextShortBreak = LocalizedEnvironment.Translation.EyesGuard.Resting;
 
             NextShortBreak = App.Configuration.ShortBreakGap;
@@ -124,7 +125,8 @@ namespace EyesGuard
             ShortBreakHandler.Stop();
             LongBreakHandler.Stop();
             UIViewModels.HeaderMenu.ManualBreakEnabled = false;
-            UIViewModels.ShortLongBreakTimeRemaining.NextLongBreak = LocalizedEnvironment.Translation.EyesGuard.Resting;
+            IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+            slbt.NextLongBreak = LocalizedEnvironment.Translation.EyesGuard.Resting;
             UIViewModels.NotifyIcon.NextLongBreak = LocalizedEnvironment.Translation.EyesGuard.Resting;
 
             NextShortBreak = App.Configuration.ShortBreakGap;
@@ -148,7 +150,6 @@ namespace EyesGuard
             {
                 v.LetItClose = true;
                 v.Close();
-                v = null;
             }
             ShortDurationCounter.Stop();
             await lv.GetWindow().ShowUsingLinearAnimationAsync();
@@ -181,8 +182,8 @@ namespace EyesGuard
                 Configuration.ShortBreaksCompleted++;
                 UpdateStats();
             }
-
-            UIViewModels.ShortLongBreakTimeRemaining.NextShortBreak = LocalizedEnvironment.Translation.EyesGuard.Waiting;
+            IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+            slbt.NextShortBreak = LocalizedEnvironment.Translation.EyesGuard.Waiting;
             UIViewModels.NotifyIcon.NextShortBreak = LocalizedEnvironment.Translation.EyesGuard.Waiting;
 
             IShortBreakShellView v = GlobalMEFContainer.Instance.GetExport<IShortBreakShellView>();
@@ -192,7 +193,6 @@ namespace EyesGuard
             {
                 v.LetItClose = true;
                 v.Close();
-                v = null;
             }
             if (!App.Configuration.OnlyOneShortBreak && Configuration.ProtectionState == GuardStates.Protecting)
             {

@@ -1,4 +1,5 @@
 ﻿using EyesGuard.MEF;
+using EyesGuard.ViewModels.Interfaces;
 using EyesGuard.Views.Animations;
 using EyesGuard.Views.Windows;
 using System.ComponentModel.Composition;
@@ -46,8 +47,8 @@ namespace EyesGuard.Views.Pages
             }
 
             ProtectionState = App.Configuration.ProtectionState;
-
-            DataContext = App.UIViewModels.ShortLongBreakTimeRemaining;
+            IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+            DataContext = slbt;
         }
 
         private void GuardButton_Click(object sender, RoutedEventArgs e)

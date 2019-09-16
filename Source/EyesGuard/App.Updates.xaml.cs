@@ -1,10 +1,7 @@
 ﻿using EyesGuard.AppManagers;
+using EyesGuard.MEF;
+using EyesGuard.ViewModels.Interfaces;
 using FormatWith;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace EyesGuard
@@ -15,7 +12,8 @@ namespace EyesGuard
         {
             if (NextLongBreak.TotalSeconds < 60)
             {
-                UIViewModels.ShortLongBreakTimeRemaining.NextLongBreak =
+                IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+                slbt.NextLongBreak =
                     LocalizedEnvironment.Translation.EyesGuard.TimeRemaining.LongBreak.Seconds.FormatWith(new
                     {
                         Seconds = (int)NextLongBreak.TotalSeconds
@@ -23,7 +21,8 @@ namespace EyesGuard
             }
             else
             {
-                UIViewModels.ShortLongBreakTimeRemaining.NextLongBreak =
+                IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+                slbt.NextLongBreak =
                     LocalizedEnvironment.Translation.EyesGuard.TimeRemaining.LongBreak.Minutes.FormatWith(new
                     {
                         Minutes = (int)NextLongBreak.TotalMinutes
@@ -37,7 +36,8 @@ namespace EyesGuard
         {
             if (NextShortBreak.TotalSeconds < 60)
             {
-                UIViewModels.ShortLongBreakTimeRemaining.NextShortBreak =
+                IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+                slbt.NextShortBreak =
                     LocalizedEnvironment.Translation.EyesGuard.TimeRemaining.ShortBreak.Seconds.FormatWith(new
                     {
                         Seconds = (int)NextShortBreak.TotalSeconds
@@ -45,7 +45,8 @@ namespace EyesGuard
             }
             else
             {
-                UIViewModels.ShortLongBreakTimeRemaining.NextShortBreak =
+                IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+                slbt.NextShortBreak =
                     LocalizedEnvironment.Translation.EyesGuard.TimeRemaining.ShortBreak.Minutes.FormatWith(new
                     {
                         Minutes = (int)NextShortBreak.TotalMinutes
@@ -59,7 +60,8 @@ namespace EyesGuard
         {
             if (PauseProtectionSpan.TotalSeconds < 60)
             {
-                UIViewModels.ShortLongBreakTimeRemaining.PauseTime =
+                IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+                slbt.PauseTime =
                     LocalizedEnvironment.Translation.EyesGuard.TimeRemaining.PauseTime.Seconds.FormatWith(new
                     {
                         Seconds = (int)PauseProtectionSpan.TotalSeconds
@@ -67,7 +69,8 @@ namespace EyesGuard
             }
             else
             {
-                UIViewModels.ShortLongBreakTimeRemaining.PauseTime =
+                IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+                slbt.PauseTime =
                     LocalizedEnvironment.Translation.EyesGuard.TimeRemaining.PauseTime.Minutes.FormatWith(new
                     {
                         Minutes = (int)PauseProtectionSpan.TotalMinutes
@@ -97,12 +100,14 @@ namespace EyesGuard
         {
             if (Configuration.KeyTimesVisible)
             {
-                UIViewModels.ShortLongBreakTimeRemaining.TimeRemainingVisibility = Visibility.Visible;
+                IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+                slbt.TimeRemainingVisibility = Visibility.Visible;
                 UIViewModels.HeaderMenu.IsTimeItemChecked = true;
             }
             else
             {
-                UIViewModels.ShortLongBreakTimeRemaining.TimeRemainingVisibility = Visibility.Collapsed;
+                IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+                slbt.TimeRemainingVisibility = Visibility.Collapsed;
                 UIViewModels.HeaderMenu.IsTimeItemChecked = false;
             }
         }
@@ -110,9 +115,15 @@ namespace EyesGuard
         public static void UpdateLongShortVisibility()
         {
             if (Configuration.ProtectionState == GuardStates.Protecting)
-                UIViewModels.ShortLongBreakTimeRemaining.LongShortVisibility = Visibility.Visible;
+            {
+                IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+                slbt.LongShortVisibility = Visibility.Visible;
+            }
             else
-                UIViewModels.ShortLongBreakTimeRemaining.LongShortVisibility = Visibility.Collapsed;
+            {
+                IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+                slbt.LongShortVisibility = Visibility.Collapsed;
+            }
         }
 
         public static void UpdateTaskbarIcon()

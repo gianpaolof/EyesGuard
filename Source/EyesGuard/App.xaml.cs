@@ -45,7 +45,7 @@ namespace EyesGuard
                 xx.TargetProperty = match.Groups[4].ToString();
             }
 
-            throw xx;
+            //throw xx;
         }
     }
 
@@ -61,11 +61,13 @@ namespace EyesGuard
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
+          
 
             ComposeAssemblyCatalog();
 
             EnableTracing();
+
+            base.OnStartup(e);
 
         }
 

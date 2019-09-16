@@ -1,5 +1,7 @@
 ﻿using EyesGuard.AppManagers;
 using EyesGuard.Configurations;
+using EyesGuard.MEF;
+using EyesGuard.ViewModels.Interfaces;
 using EyesGuard.Views.Pages;
 using Hardcodet.Wpf.TaskbarNotification;
 using System;
@@ -36,9 +38,8 @@ namespace EyesGuard
             set
             {
                 _isProtectionPaused = value;
-                UIViewModels
-                    .ShortLongBreakTimeRemaining
-                    .IsProtectionPaused = value;
+                IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+                slbt.IsProtectionPaused = value;
                 UIViewModels.NotifyIcon.PausedVisibility = value ? Visibility.Visible : Visibility.Collapsed;
                 SystemIdleDetector.EnableRaisingEvents = !value;
             }
