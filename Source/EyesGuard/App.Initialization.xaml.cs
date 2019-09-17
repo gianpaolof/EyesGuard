@@ -1,6 +1,9 @@
 ﻿using EyesGuard.Extensions;
+using EyesGuard.Logic;
 using EyesGuard.MEF;
 using EyesGuard.ViewModels.Interfaces;
+using EyesGuard.Views.Pages;
+using EyesGuard.Views.Windows.Interfaces;
 using Hardcodet.Wpf.TaskbarNotification;
 using System;
 using System.Globalization;
@@ -69,23 +72,14 @@ namespace EyesGuard
             ShortBreakVisibleTime = Configuration.ShortBreakDuration;
             LongBreakVisibleTime = Configuration.LongBreakDuration;
 
-            if (Configuration.ProtectionState == GuardStates.Protecting)
+            ITimerService timingService = GlobalMEFContainer.Instance.GetExport<ITimerService>();
+            timingService.Init();
+
+            if (App.Configuration.ProtectionState == GuardStates.Protecting)
             {
-                ShortBreakHandler.Start();
-                LongBreakHandler.Start();
+                timingService.Start();           
             }
 
-            UpdateShortTimeString();
-            UpdateLongTimeString();
-            UpdateKeyTimeVisible();
-            UpdateStats();
-
-            ShortBreakHandler.Tick += ShortBreakHandler_Tick;
-            LongBreakHandler.Tick += LongBreakHandler_Tick;
-            PauseHandler.Tick += PauseHandler_Tick;
-
-            ShortDurationCounter.Tick += ShortDurationCounter_Tick;
-            LongDurationCounter.Tick += LongDurationCounter_Tick;
 
             TaskbarIcon = "App.GlobalTaskbarIcon".Translate<TaskbarIcon>();
             TaskbarIcon.DataContext = UIViewModels.NotifyIcon;
@@ -170,5 +164,24 @@ namespace EyesGuard
             IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
             slbt.IdleVisibility = (AppIsInIdleState) ? Visibility.Visible : Visibility.Collapsed;
         }
+
+        /// <summary>
+        /// This method prevents user to change protection status in resting mode
+        /// </summary>
+        /// <returns></returns>
+        public static bool CheckIfResting(bool showWarning = true)
+        {
+            IShortBreakShellView sv = GlobalMEFContainer.Instance.GetExport<IShortBreakShellView>();
+            ILongBreakShellView lv = GlobalMEFContainer.Instance.GetExport<ILongBreakShellView>();
+
+            if (sv != null || lv != null)
+            {
+                if (showWarning)
+                    App.ShowWarning(App.LocalizedEnvironment.Translation.EyesGuard.WaitUnitlEndOfBreak, WarningPage.PageStates.Warning);
+                return true;
+            }
+            return false;
+        }
+
     }
 }

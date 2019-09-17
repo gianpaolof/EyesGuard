@@ -1,4 +1,5 @@
 ﻿using EyesGuard.AppManagers;
+using EyesGuard.Logic;
 using EyesGuard.MEF;
 using EyesGuard.Views.Animations;
 using EyesGuard.Views.Pages;
@@ -119,12 +120,14 @@ namespace EyesGuard.Views.Menus
 
         private void StartShortBreak_Click(object sender, RoutedEventArgs e)
         {
-            App.AsApp().StartShortBreak();
+            ITimerService timingService = GlobalMEFContainer.Instance.GetExport<ITimerService>();
+            timingService.DoShortBreak();
         }
 
         private void StartLongBreak_Click(object sender, RoutedEventArgs e)
         {
-            App.AsApp().StartLongBreak();
+            ITimerService timingService = GlobalMEFContainer.Instance.GetExport<ITimerService>();
+            timingService.DoLongBreak();
         }
 
         private void About_Click(object sender, RoutedEventArgs e)

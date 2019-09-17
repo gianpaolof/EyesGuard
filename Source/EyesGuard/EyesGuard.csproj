@@ -131,8 +131,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Extensions\DesignerExtensions.cs" />
-    <Compile Include="Logic\ObservableObject.cs" />
-    <Compile Include="Logic\Ticker.cs" />
+    <Compile Include="Logic\ITimerService.cs" />
+    <Compile Include="Logic\TimerService.cs" />
     <Compile Include="MEF\DumpMEF.cs" />
     <Compile Include="MEF\ExtensionMetadataAttribute.cs" />
     <Compile Include="MEF\IContent.cs" />
@@ -159,9 +159,6 @@
       <DependentUpon>App.xaml.cs</DependentUpon>
     </Compile>
     <Compile Include="App.Properties.xaml.cs">
-      <DependentUpon>App.xaml.cs</DependentUpon>
-    </Compile>
-    <Compile Include="App.TimingAndControl.xaml.cs">
       <DependentUpon>App.xaml.cs</DependentUpon>
     </Compile>
     <Compile Include="App.UI.xaml.cs">

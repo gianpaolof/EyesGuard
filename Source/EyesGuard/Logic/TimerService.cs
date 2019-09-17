@@ -1,39 +1,65 @@
 ﻿using EyesGuard.MEF;
 using EyesGuard.ViewModels.Interfaces;
 using EyesGuard.Views.Animations;
-using EyesGuard.Views.Pages;
 using EyesGuard.Views.Windows.Interfaces;
 using FormatWith;
 using Hardcodet.Wpf.TaskbarNotification;
 using System;
+using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
+using static EyesGuard.App;
 
-namespace EyesGuard
+namespace EyesGuard.Logic
 {
-    public partial class App
+    [Export(typeof(ITimerService))]
+    public class TimerService : ITimerService
     {
-        #region Timing and Control :: Common
+        static DispatcherTimer ShortBreakHandler { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
+        static DispatcherTimer ShortDurationCounter { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
+        static DispatcherTimer LongBreakHandler { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
+        static DispatcherTimer PauseHandler { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
+        static DispatcherTimer LongDurationCounter { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
 
-        /// <summary>
-        /// This method prevents user to change protection status in resting mode
-        /// </summary>
-        /// <returns></returns>
-        public static bool CheckIfResting(bool showWarning = true)
+
+        public void Init()
         {
-            IShortBreakShellView sv = GlobalMEFContainer.Instance.GetExport<IShortBreakShellView>();
-            ILongBreakShellView lv = GlobalMEFContainer.Instance.GetExport<ILongBreakShellView>();
+            NextShortBreak = App.Configuration.ShortBreakGap;
+            NextLongBreak = App.Configuration.LongBreakGap;
+            ShortBreakVisibleTime = App.Configuration.ShortBreakDuration;
+            LongBreakVisibleTime = App.Configuration.LongBreakDuration;
 
-            if (sv != null || lv != null)
-            {
-                if (showWarning)
-                    App.ShowWarning(App.LocalizedEnvironment.Translation.EyesGuard.WaitUnitlEndOfBreak, WarningPage.PageStates.Warning);
-                return true;
-            }
-            return false;
+
+            UpdateShortTimeString();
+            UpdateLongTimeString();
+            UpdateKeyTimeVisible();
+            UpdateStats();
+
+            ShortBreakHandler.Tick += ShortBreakHandler_Tick;
+            LongBreakHandler.Tick += LongBreakHandler_Tick;
+            PauseHandler.Tick += PauseHandler_Tick;
+
+            ShortDurationCounter.Tick += ShortDurationCounter_Tick;
+            LongDurationCounter.Tick += LongDurationCounter_Tick;
+
         }
 
-        #endregion
+        public void Start()
+        {
+            ShortBreakHandler.Start();
+            LongBreakHandler.Start();
+        }
+
+        public void DoShortBreak()
+        {
+            StartShortBreak();
+        }
+
+        public void DoLongBreak()
+        {
+            StartLongBreak();
+        }
 
         #region Timing and Control :: Handlers
 
@@ -139,9 +165,9 @@ namespace EyesGuard
                 LongBreakVisibleTime.Minutes,
                 LongBreakVisibleTime.Seconds
             });
-            vm.CanCancel =  (Configuration.ForceUserToBreak) ? Visibility.Collapsed : Visibility.Visible;
+            vm.CanCancel = (App.Configuration.ForceUserToBreak) ? Visibility.Collapsed : Visibility.Visible;
 
-            
+
             lv.DataContext = vm;
 
             LongBreakVisibleTime = App.Configuration.LongBreakDuration;
@@ -177,9 +203,9 @@ namespace EyesGuard
 
         private async void EndShortBreak()
         {
-            if (Configuration.SaveStats)
+            if (App.Configuration.SaveStats)
             {
-                Configuration.ShortBreaksCompleted++;
+                App.Configuration.ShortBreaksCompleted++;
                 UpdateStats();
             }
             IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
@@ -194,7 +220,7 @@ namespace EyesGuard
                 v.LetItClose = true;
                 v.Close();
             }
-            if (!App.Configuration.OnlyOneShortBreak && Configuration.ProtectionState == GuardStates.Protecting)
+            if (!App.Configuration.OnlyOneShortBreak && App.Configuration.ProtectionState == GuardStates.Protecting)
             {
                 ShortBreakHandler.Start();
             }
@@ -208,12 +234,12 @@ namespace EyesGuard
         {
             LongBreakVisibleTime = LongBreakVisibleTime.Subtract(TimeSpan.FromSeconds(1));
             ILongBreakViewModel vm = GlobalMEFContainer.Instance.GetExport<ILongBreakViewModel>();
-            vm.TimeRemaining =LocalizedEnvironment.Translation.EyesGuard.LongBreakTimeRemaining.FormatWith(new
-                {
-                    LongBreakVisibleTime.Hours,
-                    LongBreakVisibleTime.Minutes,
-                    LongBreakVisibleTime.Seconds
-                });
+            vm.TimeRemaining = LocalizedEnvironment.Translation.EyesGuard.LongBreakTimeRemaining.FormatWith(new
+            {
+                LongBreakVisibleTime.Hours,
+                LongBreakVisibleTime.Minutes,
+                LongBreakVisibleTime.Seconds
+            });
 
             if ((int)LongBreakVisibleTime.TotalSeconds == 0)
             {
@@ -225,15 +251,15 @@ namespace EyesGuard
         {
             ILongBreakShellView lv = GlobalMEFContainer.Instance.GetExport<ILongBreakShellView>();
             lv.LetItClose = true;
-            if (Configuration.SaveStats)
+            if (App.Configuration.SaveStats)
             {
-                Configuration.LongBreaksCompleted++;
+                App.Configuration.LongBreaksCompleted++;
                 UpdateStats();
             }
             await lv.GetWindow().HideUsingLinearAnimationAsync();
             lv.Close();
             ShortBreakShownOnce = false;
-            if (Configuration.ProtectionState == GuardStates.Protecting)
+            if (App.Configuration.ProtectionState == GuardStates.Protecting)
             {
                 ShortBreakHandler.Start();
                 LongBreakHandler.Start();

@@ -1,5 +1,4 @@
-﻿using EyesGuard.ViewModels;
-using EyesGuard.Views.Windows.Interfaces;
+﻿using EyesGuard.Views.Windows.Interfaces;
 using System.ComponentModel.Composition;
 using System.Windows;
 
@@ -8,7 +7,7 @@ namespace EyesGuard.Views.Windows
     /// <summary>
     /// Interaction logic for ShortBreakWindow.xaml
     /// </summary>
-    [Export(typeof(IShortBreakShellView)), PartCreationPolicy(CreationPolicy.NonShared)]
+    [Export(typeof(IShortBreakShellView)), PartCreationPolicy(CreationPolicy.Shared)]
     public partial class ShortBreakWindow : Window, IShortBreakShellView
     {
         public ShortBreakWindow()

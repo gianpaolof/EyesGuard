@@ -10,7 +10,7 @@ namespace EyesGuard.Views.Windows
     /// <summary>
     /// Interaction logic for LongBreakWindow.xaml
     /// </summary>
-    [Export(typeof(ILongBreakShellView)), PartCreationPolicy(CreationPolicy.NonShared)]
+    [Export(typeof(ILongBreakShellView)), PartCreationPolicy(CreationPolicy.Shared)]
     public partial class LongBreakWindow : Window, ILongBreakShellView
     {
         public LongBreakWindow()
