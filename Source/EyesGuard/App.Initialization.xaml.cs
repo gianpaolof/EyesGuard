@@ -67,11 +67,6 @@ namespace EyesGuard
 
             Configuration.SaveSettingsToFile();
 
-            NextShortBreak = Configuration.ShortBreakGap;
-            NextLongBreak = Configuration.LongBreakGap;
-            ShortBreakVisibleTime = Configuration.ShortBreakDuration;
-            LongBreakVisibleTime = Configuration.LongBreakDuration;
-
             ITimerService timingService = GlobalMEFContainer.Instance.GetExport<ITimerService>();
             timingService.Init();
 
