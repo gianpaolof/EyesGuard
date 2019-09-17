@@ -1,4 +1,6 @@
-﻿using EyesGuard.Views.Animations;
+﻿using EyesGuard.MEF;
+using EyesGuard.ViewModels.Interfaces;
+using EyesGuard.Views.Animations;
 using EyesGuard.Views.Windows.Interfaces;
 using System.ComponentModel.Composition;
 using System.Windows;
@@ -39,7 +41,9 @@ namespace EyesGuard.Views.Windows
                     App.LongBreakHandler.Start();
                 }
                 LongDurationCounter.Stop();
-                App.UIViewModels.HeaderMenu.ManualBreakEnabled = true;
+
+                IHeaderMenuViewModel h = GlobalMEFContainer.Instance.GetExport<IHeaderMenuViewModel>();
+                h.ManualBreakEnabled = true;
             }
             catch { }
         }

@@ -1,6 +1,10 @@
-﻿namespace EyesGuard.ViewModels
+﻿using EyesGuard.ViewModels.Interfaces;
+using System.ComponentModel.Composition;
+
+namespace EyesGuard.ViewModels
 {
-    public class HeaderMenuViewModel : ViewModelBase
+    [Export(typeof(IHeaderMenuViewModel))]
+    public class HeaderMenuViewModel : ViewModelBase, IHeaderMenuViewModel
     {
        
         public HeaderMenuViewModel()
@@ -9,6 +13,7 @@
             ManualBreakEnabled = true;
             IsFeedbackAvailable = true;
         }
+
         public bool IsTimeItemChecked
         {
             get { return GetValue(() => IsTimeItemChecked); }

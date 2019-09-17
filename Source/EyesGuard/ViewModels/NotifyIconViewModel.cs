@@ -1,10 +1,13 @@
-﻿using FormatWith;
+﻿using EyesGuard.ViewModels.Interfaces;
+using FormatWith;
+using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Media;
 
 namespace EyesGuard.ViewModels
 {
-    public class NotifyIconViewModel : ViewModelBase
+    [Export(typeof(INotifyIconViewModel))]
+    public class NotifyIconViewModel : ViewModelBase, INotifyIconViewModel
     {
 
         private string _nextShortBreak;

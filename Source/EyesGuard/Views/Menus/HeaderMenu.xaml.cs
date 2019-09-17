@@ -1,24 +1,24 @@
 ﻿using EyesGuard.AppManagers;
 using EyesGuard.Logic;
 using EyesGuard.MEF;
+using EyesGuard.ViewModels;
+using EyesGuard.ViewModels.Interfaces;
 using EyesGuard.Views.Animations;
 using EyesGuard.Views.Pages;
 using EyesGuard.Views.Windows;
 using System;
+using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace EyesGuard.Views.Menus
 {
+
     public partial class HeaderMenu : UserControl
     {
-        
-
         public HeaderMenu()
         {
             InitializeComponent();
-
-            DataContext = App.UIViewModels.HeaderMenu;
         }
 
         private void GoToStatictictsPage_Click(object sender, RoutedEventArgs e)
@@ -155,5 +155,7 @@ namespace EyesGuard.Views.Menus
 
             Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.FeedbackPage);
         }
+
+
     }
 }

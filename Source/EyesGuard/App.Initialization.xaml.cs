@@ -77,7 +77,9 @@ namespace EyesGuard
 
 
             TaskbarIcon = "App.GlobalTaskbarIcon".Translate<TaskbarIcon>();
-            TaskbarIcon.DataContext = UIViewModels.NotifyIcon;
+
+            INotifyIconViewModel ic = GlobalMEFContainer.Instance.GetExport<INotifyIconViewModel>();
+            TaskbarIcon.DataContext = ic;
 
             UpdateTaskbarIcon();
 

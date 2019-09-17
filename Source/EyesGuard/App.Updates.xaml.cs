@@ -28,7 +28,8 @@ namespace EyesGuard
                         Minutes = (int)NextLongBreak.TotalMinutes
                     });
             }
-            UIViewModels.NotifyIcon.NextLongBreak =
+            INotifyIconViewModel ic = GlobalMEFContainer.Instance.GetExport<INotifyIconViewModel>();
+            ic.NextLongBreak =
                 $"{NextLongBreak.Hours}:{NextLongBreak.Minutes}:{NextLongBreak.Seconds}";
         }
 
@@ -52,7 +53,8 @@ namespace EyesGuard
                         Minutes = (int)NextShortBreak.TotalMinutes
                     });
             }
-            UIViewModels.NotifyIcon.NextShortBreak =
+            INotifyIconViewModel ic = GlobalMEFContainer.Instance.GetExport<INotifyIconViewModel>();
+            ic.NextShortBreak =
                 $"{NextShortBreak.Hours}:{NextShortBreak.Minutes}:{NextShortBreak.Seconds}";
         }
 
@@ -76,7 +78,8 @@ namespace EyesGuard
                         Minutes = (int)PauseProtectionSpan.TotalMinutes
                     });
             }
-            UIViewModels.NotifyIcon.PauseRemaining =
+            INotifyIconViewModel ic = GlobalMEFContainer.Instance.GetExport<INotifyIconViewModel>();
+            ic.PauseRemaining =
                 $"{PauseProtectionSpan.Hours}:{PauseProtectionSpan.Minutes}:{PauseProtectionSpan.Seconds}";
         }
 
@@ -98,17 +101,17 @@ namespace EyesGuard
 
         public static void UpdateKeyTimeVisible()
         {
+            IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+            IHeaderMenuViewModel h = GlobalMEFContainer.Instance.GetExport<IHeaderMenuViewModel>();
             if (Configuration.KeyTimesVisible)
             {
-                IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
                 slbt.TimeRemainingVisibility = Visibility.Visible;
-                UIViewModels.HeaderMenu.IsTimeItemChecked = true;
+                h.IsTimeItemChecked = true;
             }
             else
             {
-                IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
                 slbt.TimeRemainingVisibility = Visibility.Collapsed;
-                UIViewModels.HeaderMenu.IsTimeItemChecked = false;
+                h.IsTimeItemChecked = false;
             }
         }
 

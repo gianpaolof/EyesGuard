@@ -40,7 +40,8 @@ namespace EyesGuard
                 _isProtectionPaused = value;
                 IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
                 slbt.IsProtectionPaused = value;
-                UIViewModels.NotifyIcon.PausedVisibility = value ? Visibility.Visible : Visibility.Collapsed;
+                INotifyIconViewModel ic = GlobalMEFContainer.Instance.GetExport<INotifyIconViewModel>();
+                ic.PausedVisibility = value ? Visibility.Visible : Visibility.Collapsed;
                 SystemIdleDetector.EnableRaisingEvents = !value;
             }
         }
@@ -64,8 +65,6 @@ namespace EyesGuard
 
         public static DispatcherTimer ShortDurationCounter { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
         public static DispatcherTimer LongDurationCounter { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
-
-        public static UIViewModels UIViewModels { get; } = new UIViewModels();
 
         public bool BasePrequirementsLoaded { get; private set; } = false;
     }
