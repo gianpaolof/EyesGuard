@@ -16,12 +16,21 @@ namespace EyesGuard.Logic
     [Export(typeof(ITimerService))]
     public class TimerService : ITimerService
     {
-        static DispatcherTimer ShortBreakHandler { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
-        static DispatcherTimer ShortDurationCounter { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
-        static DispatcherTimer LongBreakHandler { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
-        static DispatcherTimer PauseHandler { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
-        static DispatcherTimer LongDurationCounter { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
+        #region private fields
+        private static DispatcherTimer ShortBreakHandler { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
+        private static DispatcherTimer ShortDurationCounter { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
+        private static DispatcherTimer LongBreakHandler { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
+        private static DispatcherTimer PauseHandler { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
+        private static DispatcherTimer LongDurationCounter { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
 
+        private IHeaderMenuViewModel header = GlobalMEFContainer.Instance.GetExport<IHeaderMenuViewModel>();
+        private IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+        private INotifyIconViewModel icon = GlobalMEFContainer.Instance.GetExport<INotifyIconViewModel>();
+        private IShortBreakViewModel shortBreak = GlobalMEFContainer.Instance.GetExport<IShortBreakViewModel>();
+        private IShortBreakShellView shortBreakView = GlobalMEFContainer.Instance.GetExport<IShortBreakShellView>();
+        private ILongBreakShellView longBreakView = GlobalMEFContainer.Instance.GetExport<ILongBreakShellView>();
+        private ILongBreakViewModel longBreak = GlobalMEFContainer.Instance.GetExport<ILongBreakViewModel>();
+        #endregion
 
         public void Init()
         {
@@ -87,37 +96,37 @@ namespace EyesGuard.Logic
                 }
             }
         }
-
+ 
         public async void StartShortBreak()
         {
             ShortBreakHandler.Stop();
             LongBreakHandler.Stop();
 
-            IHeaderMenuViewModel h = GlobalMEFContainer.Instance.GetExport<IHeaderMenuViewModel>();
-            h.ManualBreakEnabled = false;
-            IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+           
+            header.ManualBreakEnabled = false;
+           
             slbt.NextShortBreak = App.LocalizedEnvironment.Translation.EyesGuard.Resting;
-            INotifyIconViewModel ic = GlobalMEFContainer.Instance.GetExport<INotifyIconViewModel>();
-            ic.NextShortBreak = LocalizedEnvironment.Translation.EyesGuard.Resting;
+           
+            icon.NextShortBreak = LocalizedEnvironment.Translation.EyesGuard.Resting;
 
             NextShortBreak = App.Configuration.ShortBreakGap;
             ShortBreakShownOnce = true;
 
-            IShortBreakViewModel vm = GlobalMEFContainer.Instance.GetExport<IShortBreakViewModel>();
-            vm.TimeRemaining = ((int)ShortBreakVisibleTime.TotalSeconds).ToString();
-            vm.ShortMessage = GetShortWindowMessage();
+           
+            shortBreak.TimeRemaining = ((int)ShortBreakVisibleTime.TotalSeconds).ToString();
+            shortBreak.ShortMessage = GetShortWindowMessage();
 
-            IShortBreakShellView v = GlobalMEFContainer.Instance.GetExport<IShortBreakShellView>();
-            v.DataContext = vm;
+           
+            shortBreakView.DataContext = shortBreak;
 
             ShortBreakVisibleTime = App.Configuration.ShortBreakDuration;
 
             try
             {
-                await v.GetWindow().ShowUsingLinearAnimationAsync();
-                v.Show();
-                v.BringIntoView();
-                v.Focus();
+                await shortBreakView.GetWindow().ShowUsingLinearAnimationAsync();
+                shortBreakView.Show();
+                shortBreakView.BringIntoView();
+                shortBreakView.Focus();
             }
             catch { }
 
@@ -148,44 +157,43 @@ namespace EyesGuard.Logic
 
         public async void StartLongBreak()
         {
-            IShortBreakShellView v = GlobalMEFContainer.Instance.GetExport<IShortBreakShellView>();
-            ILongBreakShellView lv = GlobalMEFContainer.Instance.GetExport<ILongBreakShellView>();
+           
+           
             ShortBreakHandler.Stop();
             LongBreakHandler.Stop();
-            IHeaderMenuViewModel h = GlobalMEFContainer.Instance.GetExport<IHeaderMenuViewModel>();
-            h.ManualBreakEnabled = false;
-            IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
+            
+            header.ManualBreakEnabled = false;
             slbt.NextLongBreak = LocalizedEnvironment.Translation.EyesGuard.Resting;
-            INotifyIconViewModel ic = GlobalMEFContainer.Instance.GetExport<INotifyIconViewModel>();
-            ic.NextLongBreak = LocalizedEnvironment.Translation.EyesGuard.Resting;
+  
+            icon.NextLongBreak = LocalizedEnvironment.Translation.EyesGuard.Resting;
 
             NextShortBreak = App.Configuration.ShortBreakGap;
             NextLongBreak = App.Configuration.LongBreakGap;
 
-            ILongBreakViewModel vm = GlobalMEFContainer.Instance.GetExport<ILongBreakViewModel>();
-            vm.TimeRemaining = LocalizedEnvironment.Translation.EyesGuard.LongBreakTimeRemaining.FormatWith(new
+           
+            longBreak.TimeRemaining = LocalizedEnvironment.Translation.EyesGuard.LongBreakTimeRemaining.FormatWith(new
             {
                 LongBreakVisibleTime.Hours,
                 LongBreakVisibleTime.Minutes,
                 LongBreakVisibleTime.Seconds
             });
-            vm.CanCancel = (App.Configuration.ForceUserToBreak) ? Visibility.Collapsed : Visibility.Visible;
+            longBreak.CanCancel = (App.Configuration.ForceUserToBreak) ? Visibility.Collapsed : Visibility.Visible;
 
 
-            lv.DataContext = vm;
+            longBreakView.DataContext = longBreak;
 
             LongBreakVisibleTime = App.Configuration.LongBreakDuration;
 
-            if (v != null)
+            if (shortBreakView != null)
             {
-                v.LetItClose = true;
-                v.Close();
+                shortBreakView.LetItClose = true;
+                shortBreakView.Close();
             }
             ShortDurationCounter.Stop();
-            await lv.GetWindow().ShowUsingLinearAnimationAsync();
-            lv.Show();
-            lv.BringIntoView();
-            lv.Focus();
+            await longBreakView.GetWindow().ShowUsingLinearAnimationAsync();
+            longBreakView.Show();
+            longBreakView.BringIntoView();
+            longBreakView.Focus();
 
             LongDurationCounter.Start();
         }
@@ -197,8 +205,7 @@ namespace EyesGuard.Logic
         private void ShortDurationCounter_Tick(object sender, EventArgs e)
         {
             ShortBreakVisibleTime = ShortBreakVisibleTime.Subtract(TimeSpan.FromSeconds(1));
-            IShortBreakViewModel vm = GlobalMEFContainer.Instance.GetExport<IShortBreakViewModel>();
-            vm.TimeRemaining = ((int)ShortBreakVisibleTime.TotalSeconds).ToString();
+            shortBreak.TimeRemaining = ((int)ShortBreakVisibleTime.TotalSeconds).ToString();
             if ((int)ShortBreakVisibleTime.TotalSeconds == 0)
             {
                 EndShortBreak();
@@ -212,18 +219,15 @@ namespace EyesGuard.Logic
                 App.Configuration.ShortBreaksCompleted++;
                 UpdateStats();
             }
-            IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
             slbt.NextShortBreak = LocalizedEnvironment.Translation.EyesGuard.Waiting;
-            INotifyIconViewModel ic = GlobalMEFContainer.Instance.GetExport<INotifyIconViewModel>();
-            ic.NextShortBreak = LocalizedEnvironment.Translation.EyesGuard.Waiting;
+            icon.NextShortBreak = LocalizedEnvironment.Translation.EyesGuard.Waiting;
 
-            IShortBreakShellView v = GlobalMEFContainer.Instance.GetExport<IShortBreakShellView>();
-
-            await v.GetWindow().HideUsingLinearAnimationAsync();
-            if (v != null)
+          
+            await shortBreakView.GetWindow().HideUsingLinearAnimationAsync();
+            if (shortBreakView != null)
             {
-                v.LetItClose = true;
-                v.Close();
+                shortBreakView.LetItClose = true;
+                shortBreakView.Close();
             }
             if (!App.Configuration.OnlyOneShortBreak && App.Configuration.ProtectionState == GuardStates.Protecting)
             {
@@ -232,15 +236,13 @@ namespace EyesGuard.Logic
             LongBreakHandler.Start();
             ShortDurationCounter.Stop();
 
-            IHeaderMenuViewModel h = GlobalMEFContainer.Instance.GetExport<IHeaderMenuViewModel>();
-            h.ManualBreakEnabled = true;
+            header.ManualBreakEnabled = true;
         }
 
         private async void LongDurationCounter_Tick(object sender, EventArgs e)
         {
             LongBreakVisibleTime = LongBreakVisibleTime.Subtract(TimeSpan.FromSeconds(1));
-            ILongBreakViewModel vm = GlobalMEFContainer.Instance.GetExport<ILongBreakViewModel>();
-            vm.TimeRemaining = LocalizedEnvironment.Translation.EyesGuard.LongBreakTimeRemaining.FormatWith(new
+            longBreak.TimeRemaining = LocalizedEnvironment.Translation.EyesGuard.LongBreakTimeRemaining.FormatWith(new
             {
                 LongBreakVisibleTime.Hours,
                 LongBreakVisibleTime.Minutes,
@@ -255,15 +257,14 @@ namespace EyesGuard.Logic
 
         private async Task EndLongBreak()
         {
-            ILongBreakShellView lv = GlobalMEFContainer.Instance.GetExport<ILongBreakShellView>();
-            lv.LetItClose = true;
+            longBreakView.LetItClose = true;
             if (App.Configuration.SaveStats)
             {
                 App.Configuration.LongBreaksCompleted++;
                 UpdateStats();
             }
-            await lv.GetWindow().HideUsingLinearAnimationAsync();
-            lv.Close();
+            await longBreakView.GetWindow().HideUsingLinearAnimationAsync();
+            longBreakView.Close();
             ShortBreakShownOnce = false;
             if (App.Configuration.ProtectionState == GuardStates.Protecting)
             {
@@ -272,8 +273,7 @@ namespace EyesGuard.Logic
             }
             LongDurationCounter.Stop();
 
-            IHeaderMenuViewModel h = GlobalMEFContainer.Instance.GetExport<IHeaderMenuViewModel>();
-            h.ManualBreakEnabled = true;
+            header.ManualBreakEnabled = true;
         }
 
         #endregion
