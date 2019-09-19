@@ -23,10 +23,6 @@ namespace EyesGuard.Views.Windows
 
         public bool LetItClose { get; set; } = false;
 
-        public Window GetWindow()
-        {
-            return this;
-        }
 
         public void HideAnimation()
         {
@@ -47,6 +43,11 @@ namespace EyesGuard.Views.Windows
         public void ShowAnimation()
         {
             base.ShowWindow();
+        }
+
+        bool IBreakShellView.IsVisible()
+        {
+            return IsVisible;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

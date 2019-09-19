@@ -136,10 +136,8 @@ namespace EyesGuard.Logic
             longBreak.CanCancel = (App.Configuration.ForceUserToBreak) ? Visibility.Collapsed : Visibility.Visible;
 
            
-            if (shortBreakView != null)
-            {
-                shortBreakView.HideAnimation();
-            }
+            if (shortBreakView.IsVisible ) shortBreakView.HideAnimation();
+
             ShortDurationCounter.Stop();
 
             longBreakView.DataContext = longBreak;

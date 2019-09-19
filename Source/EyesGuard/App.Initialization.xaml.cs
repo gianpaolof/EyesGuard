@@ -174,7 +174,7 @@ namespace EyesGuard
 
 
 
-            if (shortBreakView != null || longBreakView != null)
+            if (shortBreakView.IsVisible || longBreakView.IsVisible)
             {
                 if (showWarning)
                     App.ShowWarning(App.LocalizedEnvironment.Translation.EyesGuard.WaitUnitlEndOfBreak, WarningPage.PageStates.Warning);

@@ -48,7 +48,10 @@ namespace EyesGuard.Views.Windows
             catch { }
         }
 
-
+        bool IBreakShellView.IsVisible()
+        {
+            return IsVisible;
+        }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (!LetItClose)

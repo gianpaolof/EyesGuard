@@ -8,6 +8,7 @@ namespace EyesGuard.Views.Windows.Interfaces
 
         void HideAnimation();
 
+        bool IsVisible();
 
         object DataContext { get; set; }
 
