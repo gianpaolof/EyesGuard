@@ -2,7 +2,7 @@
 {
     public interface ITimerService
     {
-        void Start();
+        void StartService();
         void Init();
 
         void DoShortBreak();

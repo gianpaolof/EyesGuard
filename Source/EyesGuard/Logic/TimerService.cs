@@ -1,6 +1,7 @@
 ﻿using EyesGuard.MEF;
 using EyesGuard.ViewModels.Interfaces;
 using EyesGuard.Views.Animations;
+using EyesGuard.Views.Windows;
 using EyesGuard.Views.Windows.Interfaces;
 using FormatWith;
 using Hardcodet.Wpf.TaskbarNotification;
@@ -27,8 +28,8 @@ namespace EyesGuard.Logic
         private IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
         private INotifyIconViewModel icon = GlobalMEFContainer.Instance.GetExport<INotifyIconViewModel>();
         private IShortBreakViewModel shortBreak = GlobalMEFContainer.Instance.GetExport<IShortBreakViewModel>();
-        private IShortBreakShellView shortBreakView = GlobalMEFContainer.Instance.GetExport<IShortBreakShellView>();
-        private ILongBreakShellView longBreakView = GlobalMEFContainer.Instance.GetExport<ILongBreakShellView>();
+        private ShortBreakWindow shortBreakView = GlobalMEFContainer.Instance.ViewContentLoader.GetView(MetadataConstants.ShortBreakWindow) as ShortBreakWindow;
+        private LongBreakWindow longBreakView = GlobalMEFContainer.Instance.ViewContentLoader.GetView(MetadataConstants.ShortBreakWindow) as LongBreakWindow;
         private ILongBreakViewModel longBreak = GlobalMEFContainer.Instance.GetExport<ILongBreakViewModel>();
         #endregion
 
@@ -54,7 +55,7 @@ namespace EyesGuard.Logic
 
         }
 
-        public void Start()
+        public void StartService()
         {
             ShortBreakHandler.Start();
             LongBreakHandler.Start();
@@ -62,11 +63,13 @@ namespace EyesGuard.Logic
 
         public void DoShortBreak()
         {
+            PrepareForBreak();
             StartShortBreak();
         }
 
         public void DoLongBreak()
         {
+            PrepareForBreak();
             StartLongBreak();
         }
 
@@ -92,47 +95,58 @@ namespace EyesGuard.Logic
 
                 if ((int)NextShortBreak.TotalSeconds == 0)
                 {
+                    PrepareForBreak();
                     StartShortBreak();
                 }
             }
         }
  
-        public async void StartShortBreak()
+        public void StartShortBreak()
         {
-            ShortBreakHandler.Stop();
-            LongBreakHandler.Stop();
-
-           
-            header.ManualBreakEnabled = false;
-           
-            slbt.NextShortBreak = App.LocalizedEnvironment.Translation.EyesGuard.Resting;
-           
-            icon.NextShortBreak = LocalizedEnvironment.Translation.EyesGuard.Resting;
-
-            NextShortBreak = App.Configuration.ShortBreakGap;
             ShortBreakShownOnce = true;
-
-           
             shortBreak.TimeRemaining = ((int)ShortBreakVisibleTime.TotalSeconds).ToString();
             shortBreak.ShortMessage = GetShortWindowMessage();
 
-           
+
             shortBreakView.DataContext = shortBreak;
-
             ShortBreakVisibleTime = App.Configuration.ShortBreakDuration;
-
-            try
-            {
-                await shortBreakView.GetWindow().ShowUsingLinearAnimationAsync();
-                shortBreakView.Show();
-                shortBreakView.BringIntoView();
-                shortBreakView.Focus();
-            }
-            catch { }
-
+            shortBreakView.ShowAnimation();
             ShortDurationCounter.Start();
         }
 
+        private void PrepareForBreak()
+        {
+            ShortBreakHandler.Stop();
+            LongBreakHandler.Stop();
+            header.ManualBreakEnabled = false;
+            slbt.NextShortBreak = LocalizedEnvironment.Translation.EyesGuard.Resting;
+            icon.NextShortBreak = LocalizedEnvironment.Translation.EyesGuard.Resting;
+            NextShortBreak = App.Configuration.ShortBreakGap;
+        }
+
+        public void StartLongBreak()
+        {
+            NextLongBreak = App.Configuration.LongBreakGap;
+            longBreak.TimeRemaining = LocalizedEnvironment.Translation.EyesGuard.LongBreakTimeRemaining.FormatWith(new
+            {
+                LongBreakVisibleTime.Hours,
+                LongBreakVisibleTime.Minutes,
+                LongBreakVisibleTime.Seconds
+            });
+            longBreak.CanCancel = (App.Configuration.ForceUserToBreak) ? Visibility.Collapsed : Visibility.Visible;
+
+           
+            if (shortBreakView != null)
+            {
+                shortBreakView.HideAnimation();
+            }
+            ShortDurationCounter.Stop();
+
+            longBreakView.DataContext = longBreak;
+            LongBreakVisibleTime = App.Configuration.LongBreakDuration;
+            longBreakView.ShowAnimation();
+            LongDurationCounter.Start();
+        }
         private void LongBreakHandler_Tick(object sender, EventArgs e)
         {
             if (TimersAreEligibleToCountdown)
@@ -150,54 +164,13 @@ namespace EyesGuard.Logic
 
                 if ((int)NextLongBreak.TotalSeconds == 0)
                 {
+                    PrepareForBreak();
                     StartLongBreak();
                 }
             }
         }
 
-        public async void StartLongBreak()
-        {
-           
-           
-            ShortBreakHandler.Stop();
-            LongBreakHandler.Stop();
-            
-            header.ManualBreakEnabled = false;
-            slbt.NextLongBreak = LocalizedEnvironment.Translation.EyesGuard.Resting;
-  
-            icon.NextLongBreak = LocalizedEnvironment.Translation.EyesGuard.Resting;
-
-            NextShortBreak = App.Configuration.ShortBreakGap;
-            NextLongBreak = App.Configuration.LongBreakGap;
-
-           
-            longBreak.TimeRemaining = LocalizedEnvironment.Translation.EyesGuard.LongBreakTimeRemaining.FormatWith(new
-            {
-                LongBreakVisibleTime.Hours,
-                LongBreakVisibleTime.Minutes,
-                LongBreakVisibleTime.Seconds
-            });
-            longBreak.CanCancel = (App.Configuration.ForceUserToBreak) ? Visibility.Collapsed : Visibility.Visible;
-
-
-            longBreakView.DataContext = longBreak;
-
-            LongBreakVisibleTime = App.Configuration.LongBreakDuration;
-
-            if (shortBreakView != null)
-            {
-                shortBreakView.LetItClose = true;
-                shortBreakView.Close();
-            }
-            ShortDurationCounter.Stop();
-            await longBreakView.GetWindow().ShowUsingLinearAnimationAsync();
-            longBreakView.Show();
-            longBreakView.BringIntoView();
-            longBreakView.Focus();
-
-            LongDurationCounter.Start();
-        }
-
+ 
         #endregion
 
         #region Timing and Control :: During Rest
@@ -212,7 +185,7 @@ namespace EyesGuard.Logic
             }
         }
 
-        private async void EndShortBreak()
+        private void EndShortBreak()
         {
             if (App.Configuration.SaveStats)
             {
@@ -222,13 +195,9 @@ namespace EyesGuard.Logic
             slbt.NextShortBreak = LocalizedEnvironment.Translation.EyesGuard.Waiting;
             icon.NextShortBreak = LocalizedEnvironment.Translation.EyesGuard.Waiting;
 
-          
-            await shortBreakView.GetWindow().HideUsingLinearAnimationAsync();
-            if (shortBreakView != null)
-            {
-                shortBreakView.LetItClose = true;
-                shortBreakView.Close();
-            }
+
+            shortBreakView.HideAnimation();
+            
             if (!App.Configuration.OnlyOneShortBreak && App.Configuration.ProtectionState == GuardStates.Protecting)
             {
                 ShortBreakHandler.Start();
@@ -239,7 +208,7 @@ namespace EyesGuard.Logic
             header.ManualBreakEnabled = true;
         }
 
-        private async void LongDurationCounter_Tick(object sender, EventArgs e)
+        private void LongDurationCounter_Tick(object sender, EventArgs e)
         {
             LongBreakVisibleTime = LongBreakVisibleTime.Subtract(TimeSpan.FromSeconds(1));
             longBreak.TimeRemaining = LocalizedEnvironment.Translation.EyesGuard.LongBreakTimeRemaining.FormatWith(new
@@ -251,20 +220,21 @@ namespace EyesGuard.Logic
 
             if ((int)LongBreakVisibleTime.TotalSeconds == 0)
             {
-                await EndLongBreak();
+                 EndLongBreak();
             }
         }
 
-        private async Task EndLongBreak()
+        private void EndLongBreak()
         {
-            longBreakView.LetItClose = true;
+            
             if (App.Configuration.SaveStats)
             {
                 App.Configuration.LongBreaksCompleted++;
                 UpdateStats();
             }
-            await longBreakView.GetWindow().HideUsingLinearAnimationAsync();
-            longBreakView.Close();
+
+            longBreakView.HideAnimation();
+           
             ShortBreakShownOnce = false;
             if (App.Configuration.ProtectionState == GuardStates.Protecting)
             {

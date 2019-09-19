@@ -194,9 +194,9 @@
     <Compile Include="IdleDetector.cs" />
     <Compile Include="MEF\GlobalContainer.cs" />
     <Compile Include="MEF\Utils.cs" />
-    <Compile Include="Views\Windows\Interfaces\ILongBreakShellView.cs" />
+    <Compile Include="Views\Windows\BreakWindow.cs" />
+    <Compile Include="Views\Windows\Interfaces\IBreakShellView.cs" />
     <Compile Include="Views\Windows\Interfaces\IShellView.cs" />
-    <Compile Include="Views\Windows\Interfaces\IShortBreakShellView.cs" />
     <Compile Include="Views\Windows\LongBreakWindow.xaml.cs">
       <DependentUpon>LongBreakWindow.xaml</DependentUpon>
     </Compile>

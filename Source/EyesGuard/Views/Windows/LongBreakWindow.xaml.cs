@@ -12,28 +12,28 @@ namespace EyesGuard.Views.Windows
     /// <summary>
     /// Interaction logic for LongBreakWindow.xaml
     /// </summary>
-    [Export(typeof(ILongBreakShellView)), PartCreationPolicy(CreationPolicy.Shared)]
-    public partial class LongBreakWindow : Window, ILongBreakShellView
+    [Export(typeof(IContent))]
+    [ExtensionMetadata(MetadataConstants.LongBreakWindow)]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public partial class LongBreakWindow : BreakWindow, IBreakShellView, IContent
     {
         public LongBreakWindow()
         {
             InitializeComponent();
         }
-
+        
         public bool LetItClose { get; set; } = false;
 
-        private async void CloseLongBreak_Click(object sender, RoutedEventArgs e)
+        private  void CloseLongBreak_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                LetItClose = true;
                 if (App.Configuration.SaveStats)
                 {
                     App.Configuration.LongBreaksFailed++;
                     App.Configuration.SaveSettingsToFile();
                 }
-                await (this as Window).HideUsingLinearAnimationAsync();
-                Close();
+                HideAnimation();
                 App.ShortBreakShownOnce = false;
                 if (App.Configuration.ProtectionState == GuardStates.Protecting)
                 {
@@ -48,10 +48,6 @@ namespace EyesGuard.Views.Windows
             catch { }
         }
 
-        public Window GetWindow()
-        {
-            return this;
-        }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -62,8 +58,28 @@ namespace EyesGuard.Views.Windows
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             if (App.Configuration.ForceUserToBreak)
-                Cursor = Cursors.None;
+                base.Cursor = Cursors.None;
         }
 
+        public  void ShowAnimation()
+        {
+            base.ShowWindow();
+        }
+
+        public void  HideAnimation()
+        {
+            LetItClose = true;
+            base.HideWindow();
+        }
+
+        public void OnNavigatedFrom()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void OnNavigatedTo()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -12,5 +12,7 @@
         public const string SettingsPage = "SettingsPage";
         public const string StatisticsPage = "StatisticsPage";
         public const string WarningPage = "WarningPage";
+        public const string ShortBreakWindow = "ShortBreakWindow";
+        public const string LongBreakWindow = "LongBreakWindow";
     }
 }

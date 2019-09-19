@@ -2,19 +2,15 @@
 
 namespace EyesGuard.Views.Windows.Interfaces
 {
-    public interface ILongBreakShellView
+    public interface IBreakShellView
     {
-        void Show();
+        void ShowAnimation();
 
-        void Close();
+        void HideAnimation();
 
-        void BringIntoView();
-
-        bool Focus();
 
         object DataContext { get; set; }
 
-        Window GetWindow();
 
         bool LetItClose { get; set; }
     }

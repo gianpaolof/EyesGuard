@@ -3,6 +3,7 @@ using EyesGuard.Logic;
 using EyesGuard.MEF;
 using EyesGuard.ViewModels.Interfaces;
 using EyesGuard.Views.Pages;
+using EyesGuard.Views.Windows;
 using EyesGuard.Views.Windows.Interfaces;
 using Hardcodet.Wpf.TaskbarNotification;
 using System;
@@ -72,7 +73,7 @@ namespace EyesGuard
 
             if (App.Configuration.ProtectionState == GuardStates.Protecting)
             {
-                timingService.Start();           
+                timingService.StartService();           
             }
 
 
@@ -168,10 +169,12 @@ namespace EyesGuard
         /// <returns></returns>
         public static bool CheckIfResting(bool showWarning = true)
         {
-            IShortBreakShellView sv = GlobalMEFContainer.Instance.GetExport<IShortBreakShellView>();
-            ILongBreakShellView lv = GlobalMEFContainer.Instance.GetExport<ILongBreakShellView>();
+            ShortBreakWindow shortBreakView = GlobalMEFContainer.Instance.ViewContentLoader.GetView(MetadataConstants.ShortBreakWindow) as ShortBreakWindow;
+            LongBreakWindow longBreakView = GlobalMEFContainer.Instance.ViewContentLoader.GetView(MetadataConstants.ShortBreakWindow) as LongBreakWindow;
 
-            if (sv != null || lv != null)
+
+
+            if (shortBreakView != null || longBreakView != null)
             {
                 if (showWarning)
                     App.ShowWarning(App.LocalizedEnvironment.Translation.EyesGuard.WaitUnitlEndOfBreak, WarningPage.PageStates.Warning);
