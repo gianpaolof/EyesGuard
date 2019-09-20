@@ -1,4 +1,5 @@
-﻿using EyesGuard.MEF;
+﻿using EyesGuard.Logic;
+using EyesGuard.MEF;
 using EyesGuard.ViewModels.Interfaces;
 using EyesGuard.Views.Animations;
 using EyesGuard.Views.Windows.Interfaces;
@@ -35,12 +36,14 @@ namespace EyesGuard.Views.Windows
                 }
                 HideAnimation();
                 App.ShortBreakShownOnce = false;
+
+                ITimerService timingService = GlobalMEFContainer.Instance.GetExport<ITimerService>();
                 if (App.Configuration.ProtectionState == GuardStates.Protecting)
                 {
-                    App.ShortBreakHandler.Start();
-                    App.LongBreakHandler.Start();
+                    timingService.StartService();
                 }
-                LongDurationCounter.Stop();
+
+                timingService.StartService();
 
                 IHeaderMenuViewModel h = GlobalMEFContainer.Instance.GetExport<IHeaderMenuViewModel>();
                 h.ManualBreakEnabled = true;

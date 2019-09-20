@@ -169,12 +169,10 @@ namespace EyesGuard
         /// <returns></returns>
         public static bool CheckIfResting(bool showWarning = true)
         {
-            ShortBreakWindow shortBreakView = GlobalMEFContainer.Instance.ViewContentLoader.GetView(MetadataConstants.ShortBreakWindow) as ShortBreakWindow;
-            LongBreakWindow longBreakView = GlobalMEFContainer.Instance.ViewContentLoader.GetView(MetadataConstants.ShortBreakWindow) as LongBreakWindow;
+            var shortBreakView = GlobalMEFContainer.Instance.ViewContentLoader.GetView(MetadataConstants.ShortBreakWindow);
+            var longBreakView = GlobalMEFContainer.Instance.ViewContentLoader.GetView(MetadataConstants.LongBreakWindow);
 
-
-
-            if (shortBreakView.IsVisible || longBreakView.IsVisible)
+            if (shortBreakView is object || longBreakView is object)
             {
                 if (showWarning)
                     App.ShowWarning(App.LocalizedEnvironment.Translation.EyesGuard.WaitUnitlEndOfBreak, WarningPage.PageStates.Warning);

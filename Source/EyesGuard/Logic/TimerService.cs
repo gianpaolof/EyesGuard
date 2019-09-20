@@ -15,6 +15,7 @@ using static EyesGuard.App;
 namespace EyesGuard.Logic
 {
     [Export(typeof(ITimerService))]
+    [PartCreationPolicy(CreationPolicy.Shared)]
     public class TimerService : ITimerService
     {
         #region private fields
@@ -59,6 +60,32 @@ namespace EyesGuard.Logic
         {
             ShortBreakHandler.Start();
             LongBreakHandler.Start();
+        }
+
+        public void StopService()
+        {
+            ShortBreakHandler.Stop();
+            LongBreakHandler.Stop();
+        }
+
+        public void StartShortHandler()
+        {
+            ShortBreakHandler.Start();
+        }
+
+        public void StartLongHandler()
+        {
+            LongBreakHandler.Start();
+        }
+
+        public void StartPauseHandler()
+        {
+            PauseHandler.Start();
+        }
+
+        public void StopPauseHandler()
+        {
+            PauseHandler.Stop();
         }
 
         public void DoShortBreak()
@@ -116,8 +143,7 @@ namespace EyesGuard.Logic
 
         private void PrepareForBreak()
         {
-            ShortBreakHandler.Stop();
-            LongBreakHandler.Stop();
+            StopService();
             header.ManualBreakEnabled = false;
             slbt.NextShortBreak = LocalizedEnvironment.Translation.EyesGuard.Resting;
             icon.NextShortBreak = LocalizedEnvironment.Translation.EyesGuard.Resting;

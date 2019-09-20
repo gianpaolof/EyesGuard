@@ -1,4 +1,5 @@
 ﻿using EyesGuard.AppManagers;
+using EyesGuard.Logic;
 using EyesGuard.MEF;
 using EyesGuard.ViewModels.Interfaces;
 using FormatWith;
@@ -87,15 +88,17 @@ namespace EyesGuard
         {
             if (Configuration.ProtectionState == GuardStates.Protecting)
             {
-                if (!(Configuration.OnlyOneShortBreak && ShortBreakShownOnce))
-                    ShortBreakHandler.Start();
+                ITimerService timingService = GlobalMEFContainer.Instance.GetExport<ITimerService>();
 
-                LongBreakHandler.Start();
+                if (!(Configuration.OnlyOneShortBreak && ShortBreakShownOnce))
+                    timingService.StartShortHandler();
+
+                timingService.StartLongHandler();
             }
             else if (Configuration.ProtectionState == GuardStates.NotProtecting)
             {
-                ShortBreakHandler.Stop();
-                LongBreakHandler.Stop();
+                ITimerService timingService = GlobalMEFContainer.Instance.GetExport<ITimerService>();
+                timingService.StopService();
             }
         }
 

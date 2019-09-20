@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EyesGuard.Logic;
+using EyesGuard.MEF;
+using System;
 
 namespace EyesGuard
 {
@@ -15,7 +17,9 @@ namespace EyesGuard
             PauseProtectionSpan = pauseDuration;
             UpdatePauseTimeString();
             IsProtectionPaused = true;
-            PauseHandler.Start();
+            ITimerService t = GlobalMEFContainer.Instance.GetExport<ITimerService>();
+
+            t.StartPauseHandler();
 
             CurrentMainPage.ProtectionState = GuardStates.PausedProtecting;
         }
@@ -24,7 +28,10 @@ namespace EyesGuard
         {
             PauseProtectionSpan = TimeSpan.Zero;
             IsProtectionPaused = false;
-            PauseHandler.Stop();
+            ITimerService t = GlobalMEFContainer.Instance.GetExport<ITimerService>();
+
+            t.StopPauseHandler();
+
             CurrentMainPage.ProtectionState = GuardStates.Protecting;
         }
     }
