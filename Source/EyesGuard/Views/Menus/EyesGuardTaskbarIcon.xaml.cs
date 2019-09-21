@@ -42,9 +42,7 @@ namespace EyesGuard.Views.Menus
 
         private void CustomPause_Click(object sender, RoutedEventArgs e)
         {
-            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
-
-            Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.CustomPause);
+            Utils.GetMainWindow().MainFrame.Content = GlobalMEFContainer.Instance.GetView(MetadataConstants.CustomPause);
 
             if (!Utils.GetMainWindow().IsVisible)
                 ChromeManager.Show();
@@ -84,9 +82,7 @@ namespace EyesGuard.Views.Menus
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
-
-            Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.SettingsPage);
+            Utils.GetMainWindow().MainFrame.Content = GlobalMEFContainer.Instance.GetView(MetadataConstants.SettingsPage);
 
             if (!Utils.GetMainWindow().IsVisible)
                 ChromeManager.Show();

@@ -11,7 +11,7 @@ namespace EyesGuard.MEF
     public class ViewContentLoader 
     {
 
-        [ImportMany]
+        [ImportMany(typeof(IContent), RequiredCreationPolicy =CreationPolicy.Shared)]
         public IEnumerable<ExportFactory<IContent, IContentMetadata>> ViewExports
         {
             get;

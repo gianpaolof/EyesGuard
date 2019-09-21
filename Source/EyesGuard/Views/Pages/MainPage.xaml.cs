@@ -15,7 +15,6 @@ namespace EyesGuard.Views.Pages
     /// </summary>
     [Export(typeof(IContent))]
     [ExtensionMetadata(MetadataConstants.MainPage)]
-    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class MainPage : Page, IContent
     {
         public GuardStates ProtectionState

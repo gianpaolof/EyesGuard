@@ -15,7 +15,7 @@ namespace EyesGuard.Views.Windows
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    [Export(typeof(IShellView)),PartCreationPolicy(CreationPolicy.NonShared)]
+    [Export(typeof(IShellView))]
     public partial class MainWindow : Window, IShellView
     {
         public MainWindow()
@@ -85,9 +85,7 @@ namespace EyesGuard.Views.Windows
 
         private void Title_Click(object sender, RoutedEventArgs e)
         {
-            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
-
-            Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.MainPage);
+            Utils.GetMainWindow().MainFrame.Content = GlobalMEFContainer.Instance.GetView(MetadataConstants.MainPage);
         }
     }
 }

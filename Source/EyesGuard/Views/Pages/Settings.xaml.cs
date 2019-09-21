@@ -21,7 +21,6 @@ namespace EyesGuard.Views.Pages
     /// </summary>
     [Export(typeof(IContent))]
     [ExtensionMetadata(MetadataConstants.SettingsPage)]
-    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class Settings : Page, IContent
     {
         public Settings()

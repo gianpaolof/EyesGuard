@@ -13,7 +13,6 @@ namespace EyesGuard.Views.Pages
     /// </summary>
     [Export(typeof(IContent))]
     [ExtensionMetadata(MetadataConstants.DonatePage)]
-    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class Donate : Page, IContent
     {
         public Donate()

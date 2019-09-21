@@ -29,10 +29,15 @@ namespace EyesGuard.Logic
         private IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
         private INotifyIconViewModel icon = GlobalMEFContainer.Instance.GetExport<INotifyIconViewModel>();
         private IShortBreakViewModel shortBreak = GlobalMEFContainer.Instance.GetExport<IShortBreakViewModel>();
-        private ShortBreakWindow shortBreakView = GlobalMEFContainer.Instance.ViewContentLoader.GetView(MetadataConstants.ShortBreakWindow) as ShortBreakWindow;
-        private LongBreakWindow longBreakView = GlobalMEFContainer.Instance.ViewContentLoader.GetView(MetadataConstants.ShortBreakWindow) as LongBreakWindow;
+        private ShortBreakWindow shortBreakView = GlobalMEFContainer.Instance.GetView(MetadataConstants.ShortBreakWindow) as ShortBreakWindow;
+        private LongBreakWindow longBreakView = GlobalMEFContainer.Instance.GetView(MetadataConstants.ShortBreakWindow) as LongBreakWindow;
         private ILongBreakViewModel longBreak = GlobalMEFContainer.Instance.GetExport<ILongBreakViewModel>();
         #endregion
+
+        public TimerService()
+        {
+            System.Console.Out.WriteLine("Timer t:" + this.GetHashCode());
+        }
 
         public void Init()
         {

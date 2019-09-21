@@ -23,7 +23,7 @@ namespace EyesGuard.Views.Menus
 
         private void GoToStatictictsPage_Click(object sender, RoutedEventArgs e)
         {
-            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
+            var vc = GlobalMEFContainer.Instance;
 
             Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.StatisticsPage);
         }
@@ -34,14 +34,14 @@ namespace EyesGuard.Views.Menus
 
         private void GoToSettingsPage_Click(object sender, RoutedEventArgs e)
         {
-            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
+            var vc = GlobalMEFContainer.Instance;
 
             Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.SettingsPage);
         }
 
         private void GoToMainPage_Click(object sender, RoutedEventArgs e)
         {
-            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
+            var vc = GlobalMEFContainer.Instance;
 
             Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.MainPage);
         }
@@ -79,7 +79,7 @@ namespace EyesGuard.Views.Menus
 
         private void CustomPause_Click(object sender, RoutedEventArgs e)
         {
-            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
+            var vc = GlobalMEFContainer.Instance;
 
             Utils.GetMainWindow().MainFrame.Content = vc.GetView (MetadataConstants.CustomPause);
         }
@@ -140,9 +140,7 @@ namespace EyesGuard.Views.Menus
 
         private void Donate_Click(object sender, RoutedEventArgs e)
         {
-            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
-
-            Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.DonatePage);
+            Utils.GetMainWindow().MainFrame.Content = GlobalMEFContainer.Instance.GetView(MetadataConstants.DonatePage);
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -151,7 +149,7 @@ namespace EyesGuard.Views.Menus
 
         private void Feedback_Menu_Click(object sender, RoutedEventArgs e)
         {
-            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
+            var vc = GlobalMEFContainer.Instance;
 
             Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.FeedbackPage);
         }

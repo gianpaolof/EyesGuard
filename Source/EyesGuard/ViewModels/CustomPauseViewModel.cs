@@ -70,9 +70,7 @@ namespace EyesGuard.ViewModels
 
              App.PauseProtection(new TimeSpan(hours, minutes, seconds));
 
-            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
-
-            Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.MainPage);
+            Utils.GetMainWindow().MainFrame.Content = GlobalMEFContainer.Instance.GetView(MetadataConstants.MainPage);
             return;
 
         }

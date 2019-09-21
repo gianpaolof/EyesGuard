@@ -1,4 +1,5 @@
 ﻿using EyesGuard.MEF;
+using EyesGuard.Views.Windows;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -97,7 +98,7 @@ namespace EyesGuard
 
             var files = Directory.EnumerateFiles(Path.GetDirectoryName(path), "*.dll", SearchOption.AllDirectories);
 
-  
+
             foreach (var file in files)
             {
                 try
@@ -119,16 +120,11 @@ namespace EyesGuard
                 }
             }
 
-            var c  = new CompositionContainer(aggregateCatalog);
+            var c = new CompositionContainer(aggregateCatalog);
             c.ComposeParts(this);
-
-            var cc = new CompositionContainer(aggregateCatalog);
-            var vcl = new ViewContentLoader();
-            cc.ComposeParts(vcl);
 
             //DumpMEF.Dump(path);
 
-            GlobalMEFContainer.Instance.AddViewContentLoader(vcl);
             GlobalMEFContainer.Instance.AddContainer(c);
         }
 

@@ -13,7 +13,6 @@ namespace EyesGuard.Views.Pages
     /// </summary>
     [Export(typeof(IContent))]
     [ExtensionMetadata(MetadataConstants.CustomPause)]
-    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class CustomPause : Page , IContent, IPartImportsSatisfiedNotification
     {
         public CustomPause()

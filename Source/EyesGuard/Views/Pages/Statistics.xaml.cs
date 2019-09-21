@@ -13,7 +13,6 @@ namespace EyesGuard.Views.Pages
     /// </summary>
     [Export(typeof(IContent))]
     [ExtensionMetadata(MetadataConstants.StatisticsPage)]
-    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class Statistics : Page, IContent
     {
         [ImportingConstructor]

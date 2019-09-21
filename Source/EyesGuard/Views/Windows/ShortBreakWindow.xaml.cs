@@ -11,7 +11,7 @@ namespace EyesGuard.Views.Windows
 
     [Export(typeof(IContent))]
     [ExtensionMetadata(MetadataConstants.ShortBreakWindow)]
-    [PartCreationPolicy(CreationPolicy.NonShared)]
+    [PartCreationPolicy(CreationPolicy.Shared)]
     public partial class ShortBreakWindow : BreakWindow, IBreakShellView, IContent
     {
         public ShortBreakWindow()

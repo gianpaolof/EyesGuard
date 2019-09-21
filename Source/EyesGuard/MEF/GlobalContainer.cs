@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using System.Linq;
 using Xunit;
 
 namespace EyesGuard.MEF
@@ -10,11 +13,12 @@ namespace EyesGuard.MEF
     public class GlobalMEFContainer : IDisposable
     {
 
-        /// <summary>
-        /// The loader from which it is possible to get the views
-        /// </summary>
-        public ViewContentLoader ViewContentLoader { get; private set; }
-
+        [ImportMany(typeof(IContent))]
+        public IEnumerable<ExportFactory<IContent, IContentMetadata>> ViewExports
+        {
+            get;
+            set;
+        }
         public static GlobalMEFContainer Instance { get; } = new GlobalMEFContainer();
 
         private CompositionContainer container;
@@ -26,12 +30,6 @@ namespace EyesGuard.MEF
         private GlobalMEFContainer()
         {
         }
-
-        public void AddViewContentLoader(ViewContentLoader c)
-        {
-            ViewContentLoader = c;
-        }
-
 
         public void AddContainer(CompositionContainer c)
         {
@@ -46,14 +44,31 @@ namespace EyesGuard.MEF
         public T GetExport<T>() where T : class
         {
             T vm = container.GetExportedValue<T>();
-
             Assert.NotNull(vm);
 
             return vm;
         }
 
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
+        public object GetView(string uri)
+        {
+            var obj = container.GetExports<IContent, IContentMetadata>()
+                           .Where(e => e.Metadata.ViewUri.Equals(uri))
+                           .Select(e => e.Value)
+                           .FirstOrDefault();
+
+
+            return obj;
+        }
+
+   
+
+
+
+
+      
+
+    #region IDisposable Support
+    private bool disposedValue = false; // To detect redundant calls
 
         protected virtual void Dispose(bool disposing)
         {

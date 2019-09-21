@@ -13,7 +13,6 @@ namespace EyesGuard.Views.Pages
     /// </summary>
     [Export(typeof(IContent))]
     [ExtensionMetadata(MetadataConstants.FeedbackPage)]
-    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class FeedbackPage : Page, IContent
     {
         public FeedbackPage()
@@ -35,9 +34,7 @@ namespace EyesGuard.Views.Pages
         {
             Task.Run(() => Process.Start("https://github.com/0xaryan/EyesGuard/issues"));
 
-            var vc = GlobalMEFContainer.Instance.ViewContentLoader;
-
-            Utils.GetMainWindow().MainFrame.Content = vc.GetView(MetadataConstants.MainPage);
+            Utils.GetMainWindow().MainFrame.Content = GlobalMEFContainer.Instance.GetView(MetadataConstants.MainPage);
         }
     }
 }

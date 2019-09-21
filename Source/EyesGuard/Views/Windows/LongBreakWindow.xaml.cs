@@ -15,7 +15,6 @@ namespace EyesGuard.Views.Windows
     /// </summary>
     [Export(typeof(IContent))]
     [ExtensionMetadata(MetadataConstants.LongBreakWindow)]
-    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class LongBreakWindow : BreakWindow, IBreakShellView, IContent
     {
         public LongBreakWindow()

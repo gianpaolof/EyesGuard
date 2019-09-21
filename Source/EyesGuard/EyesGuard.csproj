@@ -137,7 +137,6 @@
     <Compile Include="MEF\ExtensionMetadataAttribute.cs" />
     <Compile Include="MEF\IContent.cs" />
     <Compile Include="MEF\IContentMetadata.cs" />
-    <Compile Include="MEF\ViewContentLoader.cs" />
     <Compile Include="ViewModels\Interfaces\IHeaderMenuViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ILongBreakViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IMainWindowViewModel.cs" />
