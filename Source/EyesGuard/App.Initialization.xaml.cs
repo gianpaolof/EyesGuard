@@ -69,6 +69,7 @@ namespace EyesGuard
             Configuration.SaveSettingsToFile();
 
             ITimerService timingService = GlobalMEFContainer.Instance.GetExport<ITimerService>();
+            IStatsViewModel stats = GlobalMEFContainer.Instance.GetExport<IStatsViewModel>();
             timingService.Init();
 
             if (App.Configuration.ProtectionState == GuardStates.Protecting)

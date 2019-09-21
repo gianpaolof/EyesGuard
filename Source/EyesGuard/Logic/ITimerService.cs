@@ -1,16 +1,17 @@
-﻿namespace EyesGuard.Logic
+﻿using System;
+
+namespace EyesGuard.Logic
 {
     public interface ITimerService
     {
+        void Init();
         void StartService();
 
         void StopService();
 
-        void Init();
+        void StartShortBreak();
 
-        void DoShortBreak();
-
-        void DoLongBreak();
+        void StartLongBreak();
 
         void StartShortHandler();
 
@@ -20,5 +21,14 @@
 
         void StopPauseHandler();
 
+        event EventHandler Initialized;
+
+        event EventHandler ShortBreakStarted;
+        event EventHandler ShortBreakEnded;
+        event EventHandler ShortBreakTick;
+
+        event EventHandler LongBreakStarted;
+        event EventHandler LongBreakEnded;
+        event EventHandler LongBreakTick;
     }
 }

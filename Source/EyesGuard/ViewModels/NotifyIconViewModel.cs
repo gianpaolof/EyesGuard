@@ -1,4 +1,5 @@
-﻿using EyesGuard.ViewModels.Interfaces;
+﻿using EyesGuard.Logic;
+using EyesGuard.ViewModels.Interfaces;
 using FormatWith;
 using System.ComponentModel.Composition;
 using System.Windows;
@@ -7,7 +8,7 @@ using System.Windows.Media;
 namespace EyesGuard.ViewModels
 {
     [Export(typeof(INotifyIconViewModel))]
-    public class NotifyIconViewModel : ViewModelBase, INotifyIconViewModel
+    public class NotifyIconViewModel : ViewModelBase, INotifyIconViewModel,IPartImportsSatisfiedNotification
     {
 
         private string _nextShortBreak;
@@ -23,6 +24,37 @@ namespace EyesGuard.ViewModels
             NextLongBreak = string.Empty;
             NextShortBreak = string.Empty;
             PauseRemaining = string.Empty;
+        }
+
+        [Import]
+        private ITimerService Timer { get; set; }
+
+        public void OnImportsSatisfied()
+        {
+            Timer.ShortBreakEnded += Timer_ShortBreakEnded;
+            Timer.ShortBreakStarted += Timer_ShortBreakStarted;
+            Timer.LongBreakEnded += Timer_LongBreakEnded;
+            Timer.LongBreakStarted += Timer_LongBreakStarted;
+        }
+
+        private void Timer_LongBreakStarted(object sender, System.EventArgs e)
+        {
+            NextShortBreak = App.LocalizedEnvironment.Translation.EyesGuard.Resting;
+        }
+
+        private void Timer_LongBreakEnded(object sender, System.EventArgs e)
+        {
+            NextShortBreak = App.LocalizedEnvironment.Translation.EyesGuard.Waiting;
+        }
+
+        private void Timer_ShortBreakStarted(object sender, System.EventArgs e)
+        {
+            NextShortBreak = App.LocalizedEnvironment.Translation.EyesGuard.Resting;
+        }
+
+        private void Timer_ShortBreakEnded(object sender, System.EventArgs e)
+        {
+            NextShortBreak = App.LocalizedEnvironment.Translation.EyesGuard.Waiting;
         }
 
         public SolidColorBrush DarkBrush {
@@ -117,5 +149,6 @@ namespace EyesGuard.ViewModels
 
         public string TooltipTitle => App.LocalizedEnvironment.Translation.Application.HeaderTitle;
 
+ 
     }
 }

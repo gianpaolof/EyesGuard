@@ -15,13 +15,36 @@ namespace EyesGuard.Views.Windows
     /// </summary>
     [Export(typeof(IContent))]
     [ExtensionMetadata(MetadataConstants.LongBreakWindow)]
-    public partial class LongBreakWindow : BreakWindow, IBreakShellView, IContent
+    public partial class LongBreakWindow : BreakWindow, IBreakShellView, IContent,IPartImportsSatisfiedNotification
     {
         public LongBreakWindow()
         {
             InitializeComponent();
         }
-        
+        [Import]
+        private ITimerService Timer { get; set; }
+
+
+        [Import]
+        private ILongBreakViewModel LongBreakVM { get; set; }
+
+        public void OnImportsSatisfied()
+        {
+            Timer.LongBreakEnded += Timer_LongBreakEnded;
+            Timer.LongBreakStarted += Timer_LongBreakStarted;
+            DataContext = LongBreakVM;
+        }
+
+        private void Timer_LongBreakStarted(object sender, System.EventArgs e)
+        {
+            ShowAnimation();
+        }
+
+        private void Timer_LongBreakEnded(object sender, System.EventArgs e)
+        {
+            HideAnimation();
+        }
+
         public bool LetItClose { get; set; } = false;
 
         private  void CloseLongBreak_Click(object sender, RoutedEventArgs e)

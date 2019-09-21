@@ -1,5 +1,6 @@
 ﻿using EyesGuard.Extensions;
 using EyesGuard.MEF;
+using EyesGuard.ViewModels.Interfaces;
 using EyesGuard.Views.Animations;
 using EyesGuard.Views.Controls;
 using EyesGuard.Views.Windows;
@@ -255,7 +256,8 @@ namespace EyesGuard.Views.Pages
             App.Configuration.StopCount = 0;
             App.Configuration.PauseCount = 0;
             App.Configuration.SaveSettingsToFile();
-            App.UpdateStats();
+            IStatsViewModel stats = GlobalMEFContainer.Instance.GetExport<IStatsViewModel>();
+            stats.UpdateStats();
 
             App.ShowWarning(
                 App.LocalizedEnvironment.Translation.EyesGuard.Settings.StatsSettings.StatsDeleted,

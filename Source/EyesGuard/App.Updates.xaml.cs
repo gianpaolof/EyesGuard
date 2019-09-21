@@ -154,16 +154,5 @@ namespace EyesGuard
                 stats.StopCount = Configuration.StopCount;
             }
         }
-
-        public static void UpdateStats()
-        {
-            Configuration.SaveSettingsToFile();
-            IStatsViewModel stats = GlobalMEFContainer.Instance.GetExport<IStatsViewModel>();
-            stats.ShortCount = Configuration.ShortBreaksCompleted;
-            stats.LongCompletedCount = Configuration.LongBreaksCompleted;
-            stats.LongFailedCount = Configuration.LongBreaksFailed;
-            stats.PauseCount = Configuration.PauseCount;
-            stats.StopCount = Configuration.StopCount;
-        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using EyesGuard.MEF;
+﻿using EyesGuard.Logic;
+using EyesGuard.MEF;
+using EyesGuard.ViewModels.Interfaces;
 using EyesGuard.Views.Windows.Interfaces;
 using System.ComponentModel.Composition;
 using System.Windows;
@@ -11,8 +13,7 @@ namespace EyesGuard.Views.Windows
 
     [Export(typeof(IContent))]
     [ExtensionMetadata(MetadataConstants.ShortBreakWindow)]
-    [PartCreationPolicy(CreationPolicy.Shared)]
-    public partial class ShortBreakWindow : BreakWindow, IBreakShellView, IContent
+    public partial class ShortBreakWindow : BreakWindow, IBreakShellView, IContent, IPartImportsSatisfiedNotification
     {
         public ShortBreakWindow()
         {
@@ -23,11 +24,35 @@ namespace EyesGuard.Views.Windows
 
         public bool LetItClose { get; set; } = false;
 
+        [Import]
+        private ITimerService Timer { get; set; }
+
+
+        [Import]
+        private IShortBreakViewModel ShortBreakVM { get; set; }
+
 
         public void HideAnimation()
         {
             LetItClose = true;
             base.HideWindow();
+        }
+
+        public void OnImportsSatisfied()
+        {
+            Timer.ShortBreakStarted += Timer_ShortBreakStarted;
+            Timer.ShortBreakEnded += Timer_ShortBreakEnded;
+            DataContext = ShortBreakVM;
+        }
+
+        private void Timer_ShortBreakEnded(object sender, System.EventArgs e)
+        {
+            HideAnimation();
+        }
+
+        private void Timer_ShortBreakStarted(object sender, System.EventArgs e)
+        {
+            ShowAnimation();
         }
 
         public void OnNavigatedFrom()

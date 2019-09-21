@@ -21,5 +21,7 @@ namespace EyesGuard.ViewModels.Interfaces
 
         long StopCount { get; set; }
 
+        void UpdateStats();
+
     }
 }

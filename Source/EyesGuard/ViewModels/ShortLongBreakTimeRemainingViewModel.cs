@@ -1,11 +1,13 @@
-﻿using EyesGuard.ViewModels.Interfaces;
+﻿using EyesGuard.Logic;
+using EyesGuard.ViewModels.Interfaces;
+using System;
 using System.ComponentModel.Composition;
 using System.Windows;
 
 namespace EyesGuard.ViewModels
 {
     [Export(typeof(IShortLongBreakTimeRemainingViewModel))]
-    public class ShortLongBreakTimeRemainingViewModel : ViewModelBase, IShortLongBreakTimeRemainingViewModel
+    public class ShortLongBreakTimeRemainingViewModel : ViewModelBase, IShortLongBreakTimeRemainingViewModel,IPartImportsSatisfiedNotification
     {
         public ShortLongBreakTimeRemainingViewModel()
         {
@@ -15,6 +17,37 @@ namespace EyesGuard.ViewModels
            TimeRemainingVisibility = Visibility.Visible;
         }
 
+
+        [Import]
+        private ITimerService Timer { get; set; }
+
+        public void OnImportsSatisfied()
+        {
+            Timer.ShortBreakStarted += Timer_ShortBreakStarted;
+            Timer.ShortBreakEnded += Timer_ShortBreakEnded;
+            Timer.LongBreakStarted += Timer_LongBreakStarted;
+            Timer.LongBreakEnded += Timer_LongBreakEnded;
+        }
+
+        private void Timer_LongBreakEnded(object sender, EventArgs e)
+        {
+            NextShortBreak = App.LocalizedEnvironment.Translation.EyesGuard.Waiting;
+        }
+
+        private void Timer_LongBreakStarted(object sender, EventArgs e)
+        {
+            NextShortBreak = App.LocalizedEnvironment.Translation.EyesGuard.Resting;
+        }
+
+        private void Timer_ShortBreakEnded(object sender, EventArgs e)
+        {
+            NextShortBreak = App.LocalizedEnvironment.Translation.EyesGuard.Waiting;
+        }
+
+        private void Timer_ShortBreakStarted(object sender, EventArgs e)
+        {
+            NextShortBreak = App.LocalizedEnvironment.Translation.EyesGuard.Resting;
+        }
 
         public string NextShortBreak {
             get { return GetValue(() => NextShortBreak); }

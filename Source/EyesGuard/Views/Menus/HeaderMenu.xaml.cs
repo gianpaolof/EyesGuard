@@ -121,13 +121,13 @@ namespace EyesGuard.Views.Menus
         private void StartShortBreak_Click(object sender, RoutedEventArgs e)
         {
             ITimerService timingService = GlobalMEFContainer.Instance.GetExport<ITimerService>();
-            timingService.DoShortBreak();
+            timingService.StartShortBreak();
         }
 
         private void StartLongBreak_Click(object sender, RoutedEventArgs e)
         {
             ITimerService timingService = GlobalMEFContainer.Instance.GetExport<ITimerService>();
-            timingService.DoLongBreak();
+            timingService.StartLongBreak();
         }
 
         private void About_Click(object sender, RoutedEventArgs e)
