@@ -25,9 +25,9 @@ namespace EyesGuard.ViewModels
         {
             TimeRemaining = App.LocalizedEnvironment.Translation.EyesGuard.LongBreakTimeRemaining.FormatWith(new
             {
-                App.LongBreakVisibleTime.Hours,
-                App.LongBreakVisibleTime.Minutes,
-                App.LongBreakVisibleTime.Seconds
+                Timer.LongBreakVisibleTime.Hours,
+                Timer.LongBreakVisibleTime.Minutes,
+                Timer.LongBreakVisibleTime.Seconds
             });
         }
 
@@ -35,9 +35,9 @@ namespace EyesGuard.ViewModels
         {
             TimeRemaining = App.LocalizedEnvironment.Translation.EyesGuard.LongBreakTimeRemaining.FormatWith(new
             {
-                App.LongBreakVisibleTime.Hours,
-                App.LongBreakVisibleTime.Minutes,
-                App.LongBreakVisibleTime.Seconds
+                Timer.LongBreakVisibleTime.Hours,
+                Timer.LongBreakVisibleTime.Minutes,
+                Timer.LongBreakVisibleTime.Seconds
             });
             CanCancel = (App.Configuration.ForceUserToBreak) ? Visibility.Collapsed : Visibility.Visible;
 

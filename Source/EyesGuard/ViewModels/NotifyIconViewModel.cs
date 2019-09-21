@@ -42,12 +42,12 @@ namespace EyesGuard.ViewModels
 
         private void Timer_ShortBreakTick(object sender, EventArgs e)
         {
-            NextShortBreak = $"{App.NextShortBreak.Hours}:{App.NextShortBreak.Minutes}:{App.NextShortBreak.Seconds}";
+            NextShortBreak = $"{Timer.NextShortBreak.Hours}:{Timer.NextShortBreak.Minutes}:{Timer.NextShortBreak.Seconds}";
         }
 
         private void Timer_LongBreakTick(object sender, EventArgs e)
         {
-            NextLongBreak = $"{App.NextLongBreak.Hours}:{App.NextLongBreak.Minutes}:{App.NextLongBreak.Seconds}";
+            NextLongBreak = $"{Timer.NextLongBreak.Hours}:{Timer.NextLongBreak.Minutes}:{Timer.NextLongBreak.Seconds}";
         }
 
         private void Timer_LongBreakStarted(object sender, System.EventArgs e)

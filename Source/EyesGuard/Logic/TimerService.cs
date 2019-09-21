@@ -17,6 +17,10 @@ namespace EyesGuard.Logic
         private static DispatcherTimer PauseHandler { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
         private static DispatcherTimer LongDurationCounter { get; set; } = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
 
+        public  TimeSpan NextShortBreak { get; private set; } = App.Configuration.ShortBreakGap;
+        public  TimeSpan NextLongBreak { get; private set; } = App.Configuration.LongBreakGap;
+        public  TimeSpan ShortBreakVisibleTime { get; private set; } = App.Configuration.ShortBreakDuration;
+        public  TimeSpan LongBreakVisibleTime { get; private set; } = App.Configuration.LongBreakDuration;
 
         public event EventHandler ShortBreakStarted;
         public event EventHandler ShortBreakEnded;
@@ -29,6 +33,7 @@ namespace EyesGuard.Logic
         public event EventHandler ShortBreakTick;
         #endregion
 
+        private bool TimersAreEligibleToCountdown => !(IsProtectionPaused || AppIsInIdleState);
         public void Init()
         {
             NextShortBreak = App.Configuration.ShortBreakGap;
@@ -182,7 +187,6 @@ namespace EyesGuard.Logic
             {
                 ShortDurationTick(this, EventArgs.Empty);
             }
-
 
             if ((int)ShortBreakVisibleTime.TotalSeconds == 0)
             {

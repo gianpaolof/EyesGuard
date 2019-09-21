@@ -36,12 +36,12 @@ namespace EyesGuard.ViewModels
 
         private void Timer_ShortBreakTick(object sender, System.EventArgs e)
         {
-            TimeRemaining = ((int)App.ShortBreakVisibleTime.TotalSeconds).ToString();
+            TimeRemaining = ((int)Timer.ShortBreakVisibleTime.TotalSeconds).ToString();
         }
 
         private void Timer_ShortBreakStarted(object sender, System.EventArgs e)
         {
-            TimeRemaining = ((int)App.ShortBreakVisibleTime.TotalSeconds).ToString();
+            TimeRemaining = ((int)Timer.ShortBreakVisibleTime.TotalSeconds).ToString();
             ShortMessage = App.GetShortWindowMessage();
         }
     }

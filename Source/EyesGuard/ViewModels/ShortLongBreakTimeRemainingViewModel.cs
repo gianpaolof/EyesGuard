@@ -56,13 +56,13 @@ namespace EyesGuard.ViewModels
 
         private void UpdateLongTimeString()
         {
-            if (App.NextLongBreak.TotalSeconds < 60)
+            if (Timer.NextLongBreak.TotalSeconds < 60)
             {
 
                 NextLongBreak =
                     LocalizedEnvironment.Translation.EyesGuard.TimeRemaining.LongBreak.Seconds.FormatWith(new
                     {
-                        Seconds = (int)App.NextLongBreak.TotalSeconds
+                        Seconds = (int)Timer.NextLongBreak.TotalSeconds
                     });
             }
             else
@@ -70,19 +70,19 @@ namespace EyesGuard.ViewModels
                 NextLongBreak =
                      LocalizedEnvironment.Translation.EyesGuard.TimeRemaining.LongBreak.Minutes.FormatWith(new
                      {
-                         Minutes = (int)App.NextLongBreak.TotalMinutes
+                         Minutes = (int)Timer.NextLongBreak.TotalMinutes
                      });
             }
         }
 
         public void UpdateShortTimeString()
         {
-            if (App.NextShortBreak.TotalSeconds < 60)
+            if (Timer.NextShortBreak.TotalSeconds < 60)
             {
                 NextShortBreak =
                     LocalizedEnvironment.Translation.EyesGuard.TimeRemaining.ShortBreak.Seconds.FormatWith(new
                     {
-                        Seconds = (int)App.NextShortBreak.TotalSeconds
+                        Seconds = (int)Timer.NextShortBreak.TotalSeconds
                     });
             }
             else
@@ -90,11 +90,11 @@ namespace EyesGuard.ViewModels
                NextShortBreak =
                     LocalizedEnvironment.Translation.EyesGuard.TimeRemaining.ShortBreak.Minutes.FormatWith(new
                     {
-                        Minutes = (int)App.NextShortBreak.TotalMinutes
+                        Minutes = (int)Timer.NextShortBreak.TotalMinutes
                     });
             }
             NextShortBreak =
-                $"{App.NextShortBreak.Hours}:{App.NextShortBreak.Minutes}:{App.NextShortBreak.Seconds}";
+                $"{Timer.NextShortBreak.Hours}:{Timer.NextShortBreak.Minutes}:{Timer.NextShortBreak.Seconds}";
         }
         private void Timer_LongBreakEnded(object sender, EventArgs e)
         {

@@ -51,14 +51,8 @@ namespace EyesGuard
             && CurrentMainPage?.ProtectionState == GuardStates.Protecting
             && SystemIdleDetector.IsSystemIdle();
 
-        public static bool TimersAreEligibleToCountdown => !(IsProtectionPaused || AppIsInIdleState);
-
         public static TimeSpan PauseProtectionSpan { get; set; } = TimeSpan.FromSeconds(0);
-        public static TimeSpan NextShortBreak { get; set; } = App.Configuration.ShortBreakGap;
-        public static TimeSpan NextLongBreak { get; set; } = App.Configuration.LongBreakGap;
-        public static TimeSpan ShortBreakVisibleTime { get; set; } = App.Configuration.ShortBreakDuration;
-        public static TimeSpan LongBreakVisibleTime { get; set; } = App.Configuration.LongBreakDuration;
-
+  
         public bool BasePrequirementsLoaded { get; private set; } = false;
     }
 }
