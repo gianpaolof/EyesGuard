@@ -1,13 +1,10 @@
 ﻿using EyesGuard.AppManagers;
 using EyesGuard.Logic;
 using EyesGuard.MEF;
-using EyesGuard.ViewModels;
-using EyesGuard.ViewModels.Interfaces;
 using EyesGuard.Views.Animations;
 using EyesGuard.Views.Pages;
 using EyesGuard.Views.Windows;
 using System;
-using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
 

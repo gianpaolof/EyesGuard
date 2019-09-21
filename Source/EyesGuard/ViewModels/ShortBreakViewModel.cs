@@ -9,7 +9,6 @@ namespace EyesGuard.ViewModels
     {
         public ShortBreakViewModel()
         {
-            //Ticker t = new Ticker();
             ShortMessage = string.Empty; ;
             TimeRemaining = string.Empty; ;
         }
@@ -32,7 +31,7 @@ namespace EyesGuard.ViewModels
         public void OnImportsSatisfied()
         {
             Timer.ShortBreakStarted += Timer_ShortBreakStarted;
-            Timer.ShortBreakTick += Timer_ShortBreakTick;
+            Timer.ShortDurationTick += Timer_ShortBreakTick;
         }
 
         private void Timer_ShortBreakTick(object sender, System.EventArgs e)

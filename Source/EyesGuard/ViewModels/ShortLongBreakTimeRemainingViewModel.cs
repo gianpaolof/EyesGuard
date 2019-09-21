@@ -1,8 +1,10 @@
 ﻿using EyesGuard.Logic;
 using EyesGuard.ViewModels.Interfaces;
+using FormatWith;
 using System;
 using System.ComponentModel.Composition;
 using System.Windows;
+using static EyesGuard.App;
 
 namespace EyesGuard.ViewModels
 {
@@ -11,7 +13,7 @@ namespace EyesGuard.ViewModels
     {
         public ShortLongBreakTimeRemainingViewModel()
         {
-           NextShortBreak = string.Empty; ;
+           NextShortBreak = string.Empty;
            NextLongBreak = string.Empty; ;
            PauseTime = string.Empty; ;
            TimeRemainingVisibility = Visibility.Visible;
@@ -27,8 +29,73 @@ namespace EyesGuard.ViewModels
             Timer.ShortBreakEnded += Timer_ShortBreakEnded;
             Timer.LongBreakStarted += Timer_LongBreakStarted;
             Timer.LongBreakEnded += Timer_LongBreakEnded;
+            Timer.LongBreakTick += (o,e) => UpdateLongTimeString();
+            Timer.ShortBreakTick += (o,e) => UpdateShortTimeString();
+            Timer.Initialized += Timer_Initialized;
         }
 
+
+        private void Timer_Initialized(object sender, EventArgs e)
+        {
+            UpdateLongTimeString();
+            UpdateShortTimeString();
+            UpdateTimeRemainingVisibility();
+        }
+
+        private void UpdateTimeRemainingVisibility()
+        {
+            if (Configuration.KeyTimesVisible)
+            {
+                TimeRemainingVisibility = Visibility.Visible;
+            }
+            else
+            {
+                TimeRemainingVisibility = Visibility.Collapsed;
+            }
+        }
+
+        private void UpdateLongTimeString()
+        {
+            if (App.NextLongBreak.TotalSeconds < 60)
+            {
+
+                NextLongBreak =
+                    LocalizedEnvironment.Translation.EyesGuard.TimeRemaining.LongBreak.Seconds.FormatWith(new
+                    {
+                        Seconds = (int)App.NextLongBreak.TotalSeconds
+                    });
+            }
+            else
+            {
+                NextLongBreak =
+                     LocalizedEnvironment.Translation.EyesGuard.TimeRemaining.LongBreak.Minutes.FormatWith(new
+                     {
+                         Minutes = (int)App.NextLongBreak.TotalMinutes
+                     });
+            }
+        }
+
+        public void UpdateShortTimeString()
+        {
+            if (App.NextShortBreak.TotalSeconds < 60)
+            {
+                NextShortBreak =
+                    LocalizedEnvironment.Translation.EyesGuard.TimeRemaining.ShortBreak.Seconds.FormatWith(new
+                    {
+                        Seconds = (int)App.NextShortBreak.TotalSeconds
+                    });
+            }
+            else
+            {
+               NextShortBreak =
+                    LocalizedEnvironment.Translation.EyesGuard.TimeRemaining.ShortBreak.Minutes.FormatWith(new
+                    {
+                        Minutes = (int)App.NextShortBreak.TotalMinutes
+                    });
+            }
+            NextShortBreak =
+                $"{App.NextShortBreak.Hours}:{App.NextShortBreak.Minutes}:{App.NextShortBreak.Seconds}";
+        }
         private void Timer_LongBreakEnded(object sender, EventArgs e)
         {
             NextShortBreak = App.LocalizedEnvironment.Translation.EyesGuard.Waiting;

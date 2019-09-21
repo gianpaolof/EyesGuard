@@ -1,9 +1,8 @@
 ﻿using EyesGuard.Logic;
 using EyesGuard.ViewModels.Interfaces;
+using FormatWith;
 using System.ComponentModel.Composition;
 using System.Windows;
-using static EyesGuard.App;
-using FormatWith;
 namespace EyesGuard.ViewModels
 {
     [Export(typeof(ILongBreakViewModel))]
@@ -19,7 +18,7 @@ namespace EyesGuard.ViewModels
         public void OnImportsSatisfied()
         {
             Timer.LongBreakStarted += Timer_LongBreakStarted; 
-            Timer.LongBreakTick += Timer_LongBreakTick;
+            Timer.LongDurationTick += Timer_LongBreakTick;
         }
 
         private void Timer_LongBreakTick(object sender, System.EventArgs e)

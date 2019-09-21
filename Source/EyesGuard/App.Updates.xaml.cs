@@ -9,55 +9,7 @@ namespace EyesGuard
 {
     public partial class App
     {
-        public static void UpdateLongTimeString()
-        {
-            if (NextLongBreak.TotalSeconds < 60)
-            {
-                IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
-                slbt.NextLongBreak =
-                    LocalizedEnvironment.Translation.EyesGuard.TimeRemaining.LongBreak.Seconds.FormatWith(new
-                    {
-                        Seconds = (int)NextLongBreak.TotalSeconds
-                    });
-            }
-            else
-            {
-                IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
-                slbt.NextLongBreak =
-                    LocalizedEnvironment.Translation.EyesGuard.TimeRemaining.LongBreak.Minutes.FormatWith(new
-                    {
-                        Minutes = (int)NextLongBreak.TotalMinutes
-                    });
-            }
-            INotifyIconViewModel ic = GlobalMEFContainer.Instance.GetExport<INotifyIconViewModel>();
-            ic.NextLongBreak =
-                $"{NextLongBreak.Hours}:{NextLongBreak.Minutes}:{NextLongBreak.Seconds}";
-        }
-
-        public static void UpdateShortTimeString()
-        {
-            if (NextShortBreak.TotalSeconds < 60)
-            {
-                IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
-                slbt.NextShortBreak =
-                    LocalizedEnvironment.Translation.EyesGuard.TimeRemaining.ShortBreak.Seconds.FormatWith(new
-                    {
-                        Seconds = (int)NextShortBreak.TotalSeconds
-                    });
-            }
-            else
-            {
-                IShortLongBreakTimeRemainingViewModel slbt = GlobalMEFContainer.Instance.GetExport<IShortLongBreakTimeRemainingViewModel>();
-                slbt.NextShortBreak =
-                    LocalizedEnvironment.Translation.EyesGuard.TimeRemaining.ShortBreak.Minutes.FormatWith(new
-                    {
-                        Minutes = (int)NextShortBreak.TotalMinutes
-                    });
-            }
-            INotifyIconViewModel ic = GlobalMEFContainer.Instance.GetExport<INotifyIconViewModel>();
-            ic.NextShortBreak =
-                $"{NextShortBreak.Hours}:{NextShortBreak.Minutes}:{NextShortBreak.Seconds}";
-        }
+      
 
         public static void UpdatePauseTimeString()
         {

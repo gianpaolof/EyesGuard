@@ -25,10 +25,14 @@ namespace EyesGuard.Logic
 
         event EventHandler ShortBreakStarted;
         event EventHandler ShortBreakEnded;
-        event EventHandler ShortBreakTick;
+        event EventHandler ShortDurationTick;
 
         event EventHandler LongBreakStarted;
         event EventHandler LongBreakEnded;
+        event EventHandler LongDurationTick;
+
         event EventHandler LongBreakTick;
+        event EventHandler ShortBreakTick;
+
     }
 }

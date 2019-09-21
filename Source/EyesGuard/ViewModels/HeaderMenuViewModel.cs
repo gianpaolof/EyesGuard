@@ -25,6 +25,21 @@ namespace EyesGuard.ViewModels
             Timer.ShortBreakEnded += Timer_ShortBreakEnded;
             Timer.LongBreakStarted += Timer_LongBreakStarted;
             Timer.LongBreakEnded += Timer_LongBreakEnded;
+            Timer.Initialized += Timer_Initialized;
+        }
+
+        private void Timer_Initialized(object sender, EventArgs e)
+        {
+            if (App.Configuration.KeyTimesVisible)
+            {
+               
+                IsTimeItemChecked = true;
+            }
+            else
+            {
+               
+                IsTimeItemChecked = false;
+            }
         }
 
         private void Timer_LongBreakEnded(object sender, EventArgs e)

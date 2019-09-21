@@ -1,11 +1,6 @@
-﻿using EyesGuard.MEF;
-using EyesGuard.ViewModels.Interfaces;
-using EyesGuard.Views.Windows;
-using FormatWith;
-using Hardcodet.Wpf.TaskbarNotification;
+﻿using Hardcodet.Wpf.TaskbarNotification;
 using System;
 using System.ComponentModel.Composition;
-using System.Windows;
 using System.Windows.Threading;
 using static EyesGuard.App;
 
@@ -25,12 +20,13 @@ namespace EyesGuard.Logic
 
         public event EventHandler ShortBreakStarted;
         public event EventHandler ShortBreakEnded;
-        public event EventHandler ShortBreakTick;
-
+        public event EventHandler ShortDurationTick;
         public event EventHandler LongBreakStarted;
         public event EventHandler LongBreakEnded;
-        public event EventHandler LongBreakTick;
+        public event EventHandler LongDurationTick;
         public event EventHandler Initialized;
+        public event EventHandler LongBreakTick;
+        public event EventHandler ShortBreakTick;
         #endregion
 
         public void Init()
@@ -39,11 +35,6 @@ namespace EyesGuard.Logic
             NextLongBreak = App.Configuration.LongBreakGap;
             ShortBreakVisibleTime = App.Configuration.ShortBreakDuration;
             LongBreakVisibleTime = App.Configuration.LongBreakDuration;
-
-
-            UpdateShortTimeString();
-            UpdateLongTimeString();
-            UpdateKeyTimeVisible();
 
             ShortBreakHandler.Tick += ShortBreakHandler_Tick;
             LongBreakHandler.Tick += LongBreakHandler_Tick;
@@ -109,8 +100,11 @@ namespace EyesGuard.Logic
             if (TimersAreEligibleToCountdown)
             {
                 NextShortBreak = NextShortBreak.Subtract(TimeSpan.FromSeconds(1));
-                UpdateShortTimeString();
-
+                if(ShortBreakTick is object)
+                {
+                    ShortBreakTick(this, EventArgs.Empty);
+                }
+ 
                 if ((int)NextShortBreak.TotalSeconds == 0)
                 {
                     StartShortBreak();
@@ -154,7 +148,11 @@ namespace EyesGuard.Logic
             if (TimersAreEligibleToCountdown)
             {
                 NextLongBreak = NextLongBreak.Subtract(TimeSpan.FromSeconds(1));
-                UpdateLongTimeString();
+
+                if (LongBreakTick is object)
+                {
+                    LongBreakTick(this, EventArgs.Empty);
+                }
 
                 if (App.Configuration.AlertBeforeLongBreak && (int)NextLongBreak.TotalSeconds == 60)
                 {
@@ -180,9 +178,9 @@ namespace EyesGuard.Logic
         {
             ShortBreakVisibleTime = ShortBreakVisibleTime.Subtract(TimeSpan.FromSeconds(1));
 
-            if (ShortBreakTick is object)
+            if (ShortDurationTick is object)
             {
-                ShortBreakTick(this, EventArgs.Empty);
+                ShortDurationTick(this, EventArgs.Empty);
             }
 
 
@@ -212,12 +210,10 @@ namespace EyesGuard.Logic
         {
             LongBreakVisibleTime = LongBreakVisibleTime.Subtract(TimeSpan.FromSeconds(1));
 
-            if (LongBreakTick is object)
+            if (LongDurationTick is object)
             {
-                LongBreakTick(this, EventArgs.Empty);
+                LongDurationTick(this, EventArgs.Empty);
             }
-
-
 
             if ((int)LongBreakVisibleTime.TotalSeconds == 0)
             {

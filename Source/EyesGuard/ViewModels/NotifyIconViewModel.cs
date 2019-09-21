@@ -1,6 +1,7 @@
 ﻿using EyesGuard.Logic;
 using EyesGuard.ViewModels.Interfaces;
 using FormatWith;
+using System;
 using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Media;
@@ -35,6 +36,18 @@ namespace EyesGuard.ViewModels
             Timer.ShortBreakStarted += Timer_ShortBreakStarted;
             Timer.LongBreakEnded += Timer_LongBreakEnded;
             Timer.LongBreakStarted += Timer_LongBreakStarted;
+            Timer.LongBreakTick += Timer_LongBreakTick;
+            Timer.ShortBreakTick += Timer_ShortBreakTick;
+        }
+
+        private void Timer_ShortBreakTick(object sender, EventArgs e)
+        {
+            NextShortBreak = $"{App.NextShortBreak.Hours}:{App.NextShortBreak.Minutes}:{App.NextShortBreak.Seconds}";
+        }
+
+        private void Timer_LongBreakTick(object sender, EventArgs e)
+        {
+            NextLongBreak = $"{App.NextLongBreak.Hours}:{App.NextLongBreak.Minutes}:{App.NextLongBreak.Seconds}";
         }
 
         private void Timer_LongBreakStarted(object sender, System.EventArgs e)
