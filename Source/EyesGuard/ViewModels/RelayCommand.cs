@@ -1,15 +1,59 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace EyesGuard.ViewModels
 {
+
     /// <summary>
-    /// A command whose sole purpose is to relay its functionality 
-    /// to other objects by invoking delegates. 
-    /// The default return value for the CanExecute method is 'true'.
-    /// <see cref="RaiseCanExecuteChanged"/> needs to be called whenever
-    /// <see cref="CanExecute"/> is expected to return a different value.
+    /// SEE https://gist.github.com/schuster-rainer/2648922
     /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class RelayCommand<T> : ICommand
+    {
+        #region Fields
+
+        readonly Action<T> _execute;
+        readonly Predicate<T> _canExecute;
+
+        #endregion // Fields
+
+        #region Constructors
+
+        public RelayCommand(Action<T> execute)
+        : this(execute, null)
+        {
+        }
+
+        public RelayCommand(Action<T> execute, Predicate<T> canExecute)
+        {
+            _execute = execute ?? throw new ArgumentNullException("execute");
+            _canExecute = canExecute;
+        }
+        #endregion // Constructors
+
+        #region ICommand Members
+
+        [DebuggerStepThrough]
+        public bool CanExecute(object parameter)
+        {
+            return _canExecute == null ? true : _canExecute((T)parameter);
+        }
+
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+
+        public void Execute(object parameter)
+        {
+            _execute((T)parameter);
+        }
+
+        #endregion // ICommand Members
+    }
+
     public class RelayCommand : ICommand
     {
         #region Private members
@@ -39,11 +83,7 @@ namespace EyesGuard.ViewModels
         /// <param name="canExecute">The execution status logic.</param>
         public RelayCommand(Action execute, Func<bool> canExecute)
         {
-            if (execute == null)
-            {
-                throw new ArgumentNullException("execute");
-            }
-            this.execute = execute;
+            this.execute = execute ?? throw new ArgumentNullException("execute");
             this.canExecute = canExecute;
         }
 
@@ -82,11 +122,7 @@ namespace EyesGuard.ViewModels
         /// </summary>
         public void RaiseCanExecuteChanged()
         {
-            var handler = this.CanExecuteChanged;
-            if (handler != null)
-            {
-                handler(this, EventArgs.Empty);
-            }
+            this.CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

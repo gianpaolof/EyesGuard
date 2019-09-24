@@ -131,6 +131,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Extensions\DesignerExtensions.cs" />
+    <Compile Include="Logic\Constants.cs" />
     <Compile Include="Logic\ITimerService.cs" />
     <Compile Include="Logic\TimerService.cs" />
     <Compile Include="MEF\DumpMEF.cs" />

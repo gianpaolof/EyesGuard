@@ -8,6 +8,7 @@
     xmlns:lang="clr-namespace:EyesGuard.Localization"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:menus="clr-namespace:EyesGuard.Views.Menus"
+    xmlns:vm="clr-namespace:EyesGuard.ViewModels"
     x:Name="this"
     Title="{lang:LocalizedString 'Application.OSTitle'}"
     Width="1000"
@@ -32,7 +33,11 @@
             ResizeBorderThickness="10"
             UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
-
+    <Window.Resources>
+        <DataTemplate x:Key="HeaderTemplate" DataType="{x:Type vm:HeaderMenuViewModel}">
+            <menus:HeaderMenu/>
+        </DataTemplate>
+    </Window.Resources>
     <Grid x:Name="MainContainer">
         <Border BorderBrush="{StaticResource HastiUI.SolidColorBrushes.LightAwesomeBlue}" BorderThickness="1" />
         <Grid Margin="1">
@@ -71,11 +76,15 @@
                                 Text="{lang:LocalizedString 'Application.HeaderTitle'}" />
                         </StackPanel>
                     </Button>
-                    <menus:HeaderMenu
+                    <ContentControl  
+                        ContentTemplate="{StaticResource HeaderTemplate}"
+                        Background="Yellow"
+                        Height="auto" Width="auto"
+                        Grid.Row="0"
                         Grid.Column="1"
                         Margin="0"
                         VerticalAlignment="Center"
-                        WindowChrome.IsHitTestVisibleInChrome="True" />
+                        WindowChrome.IsHitTestVisibleInChrome="True" Content="{Binding Path=Header, PresentationTraceSources.TraceLevel=High}" ></ContentControl>
                     <StackPanel
                         Grid.Column="3"
                         Margin="5,5"

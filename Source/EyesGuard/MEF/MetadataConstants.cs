@@ -14,5 +14,6 @@
         public const string WarningPage = "WarningPage";
         public const string ShortBreakWindow = "ShortBreakWindow";
         public const string LongBreakWindow = "LongBreakWindow";
+        public const string xx = "xx";
     }
 }

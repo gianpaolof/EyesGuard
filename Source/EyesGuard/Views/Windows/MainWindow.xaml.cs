@@ -1,6 +1,8 @@
 ﻿using EyesGuard.AppManagers;
 using EyesGuard.Configurations;
 using EyesGuard.MEF;
+using EyesGuard.ViewModels;
+using EyesGuard.ViewModels.Interfaces;
 using EyesGuard.Views.Animations;
 using EyesGuard.Views.Pages;
 using EyesGuard.Views.Windows.Interfaces;
@@ -15,7 +17,7 @@ namespace EyesGuard.Views.Windows
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    [Export(typeof(IShellView))]
+    [Export(typeof(IShellView)), PartCreationPolicy(CreationPolicy.Shared)]
     public partial class MainWindow : Window, IShellView
     {
         public MainWindow()
@@ -24,7 +26,11 @@ namespace EyesGuard.Views.Windows
 
             if (App.LaunchMinimized)
                 this.Hide();
+
         }
+
+        [Import]
+        public IHeaderMenuViewModel Header { get; set; }
 
         public MainWindow GetMainWindow()
         {
