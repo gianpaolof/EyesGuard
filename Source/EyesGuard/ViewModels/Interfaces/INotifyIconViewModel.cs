@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace EyesGuard.ViewModels.Interfaces
@@ -30,6 +31,12 @@ namespace EyesGuard.ViewModels.Interfaces
 
         string PauseRemaining { get; set; }
 
-
+        ICommand Pause { get; }
+        ICommand CustomPause { get; }
+        ICommand Exit { get; }
+        ICommand StartProtect { get; }
+        ICommand StopProtect { get; }
+        ICommand DoubleClick { get; }
+        ICommand Settings { get; }
     }
 }

@@ -6,6 +6,8 @@
     xmlns:lang="clr-namespace:EyesGuard.Localization"
     xmlns:local="clr-namespace:EyesGuard.Views.Menus"
     x:Name="this"
+     xmlns:const="clr-namespace:EyesGuard.Views.Windows"
+    xmlns:timer="clr-namespace:EyesGuard.Logic"
     xmlns:c="clr-namespace:EyesGuard.Converters"
     xmlns:nf="http://www.hardcodet.net/taskbar">
 
@@ -91,34 +93,39 @@
                           Header="{lang:LocalizedString 'ShellExtensions.TaskbarIcon.Menu.ShowMainMenu'}" />
                 <Separator />
                 <MenuItem
-                    Click="StartProtect_Click"
+                     Command="{Binding Path=StartProtect}"
                     Header="{lang:LocalizedString 'ShellExtensions.TaskbarIcon.Menu.StartProtection'}"
                     Icon="{StaticResource EyesGuard.StartProtecting}"
                     Visibility="{Binding StartProtectVisibility}" />
                 <MenuItem
-                    Click="StopProtect_Click"
+                    Command="{Binding Path=StopProtect}"
                     Header="{lang:LocalizedString 'ShellExtensions.TaskbarIcon.Menu.StopProtection'}"
                     Icon="{StaticResource EyesGuard.StopProtecting}"
                     Visibility="{Binding StopProtectVisibility}" />
                 <MenuItem Header="{lang:LocalizedString 'ShellExtensions.TaskbarIcon.Menu.PauseFor'}">
-                    <MenuItem Click="FiveMinutesPause_Click"
+                    <MenuItem  Command="{Binding Path=Pause}"
+                     CommandParameter="{x:Static timer:Constants.Min5}"
                               Header="{lang:LocalizedString 'ShellExtensions.TaskbarIcon.Menu.FiveMins'}" />
-                    <MenuItem Click="TenMinutesPause_Click"
+                    <MenuItem  Command="{Binding Path=Pause}"
+                     CommandParameter="{x:Static timer:Constants.Min10}"
                               Header="{lang:LocalizedString 'ShellExtensions.TaskbarIcon.Menu.TenMins'}" />
-                    <MenuItem Click="ThirtyMinutesPause_Click"
+                    <MenuItem  Command="{Binding Path=Pause}"
+                     CommandParameter="{x:Static timer:Constants.Min30}"
                               Header="{lang:LocalizedString 'ShellExtensions.TaskbarIcon.Menu.ThirtyMins'}" />
-                    <MenuItem Click="OneHourPause_Click"
+                    <MenuItem  Command="{Binding Path=Pause}"
+                     CommandParameter="{x:Static timer:Constants.Min60}"
                               Header="{lang:LocalizedString 'ShellExtensions.TaskbarIcon.Menu.OneHour'}" />
-                    <MenuItem Click="TwoHourPause_Click"
+                    <MenuItem  Command="{Binding Path=Pause}"
+                     CommandParameter="{x:Static timer:Constants.Min120}"
                               Header="{lang:LocalizedString 'ShellExtensions.TaskbarIcon.Menu.TwoHours'}" />
                     <Separator />
-                    <MenuItem Click="CustomPause_Click"
+                    <MenuItem Command="{Binding Path=CustomPause}"
                               Header="{lang:LocalizedString 'ShellExtensions.TaskbarIcon.Menu.Custom'}" />
                 </MenuItem>
                 <Separator />
-                <MenuItem Click="Settings_Click" Header="{lang:LocalizedString 'ShellExtensions.TaskbarIcon.Menu.Settings'}" />
+                <MenuItem Command="{Binding Path=Settings}" Header="{lang:LocalizedString 'ShellExtensions.TaskbarIcon.Menu.Settings'}" />
                 <Separator />
-                <MenuItem Click="Exit_Click" Header="{lang:LocalizedString 'ShellExtensions.TaskbarIcon.Menu.Exit'}" />
+                <MenuItem Command="{Binding Path=Exit}" Header="{lang:LocalizedString 'ShellExtensions.TaskbarIcon.Menu.Exit'}" />
             </ContextMenu>
         </nf:TaskbarIcon.ContextMenu>
     </nf:TaskbarIcon>

@@ -1,9 +1,13 @@
-﻿using EyesGuard.Logic;
+﻿using EyesGuard.AppManagers;
+using EyesGuard.Logic;
+using EyesGuard.MEF;
 using EyesGuard.ViewModels.Interfaces;
+using EyesGuard.Views.Windows;
 using FormatWith;
 using System;
 using System.ComponentModel.Composition;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace EyesGuard.ViewModels
@@ -25,7 +29,23 @@ namespace EyesGuard.ViewModels
             NextLongBreak = string.Empty;
             NextShortBreak = string.Empty;
             PauseRemaining = string.Empty;
+            Pause = new RelayCommand<int>(time => App.PauseProtection(TimeSpan.FromMinutes(time)));
+            Exit = new RelayCommand(() => Exit_Click());
+            CustomPause = new RelayCommand(() => CustomPause_Click());
+            StartProtect = new RelayCommand(() => StartProtect_Click());
+            StopProtect = new RelayCommand(() => StopProtect_Click());
+            Settings = new RelayCommand(() => Settings_Click());
         }
+
+        public ICommand Pause { get; }
+        public ICommand CustomPause { get; }
+        public ICommand Exit { get; }
+        public ICommand StartProtect { get; }
+        public ICommand StopProtect { get; }
+        public ICommand DoubleClick { get; }
+        public ICommand Settings { get; }
+
+
 
         [Import]
         private ITimerService Timer { get; set; }
@@ -40,6 +60,44 @@ namespace EyesGuard.ViewModels
             Timer.ShortBreakTick += Timer_ShortBreakTick;
         }
 
+        private void StartProtect_Click()
+        {
+            if (App.CheckIfResting()) return;
+
+            if (App.Configuration.ProtectionState == App.GuardStates.PausedProtecting)
+                App.ResumeProtection();
+            else
+                App.CurrentMainPage.ProtectionState = App.GuardStates.Protecting;
+        }
+
+        private void StopProtect_Click()
+        {
+            if (App.CheckIfResting()) return;
+
+            if (App.Configuration.SaveStats) App.UpdateIntruptOfStats(App.GuardStates.NotProtecting);
+            App.CurrentMainPage.ProtectionState = App.GuardStates.NotProtecting;
+        }
+
+        private void Settings_Click()
+        {
+            Utils.GetMainWindow().MainFrame.Content = GlobalMEFContainer.Instance.GetView(MetadataConstants.SettingsPage);
+
+            if (!Utils.GetMainWindow().IsVisible)
+                ChromeManager.Show();
+        }
+
+        private void CustomPause_Click()
+        {
+            Utils.GetMainWindow().MainFrame.Content = GlobalMEFContainer.Instance.GetView(MetadataConstants.CustomPause);
+
+            if (!Utils.GetMainWindow().IsVisible)
+                ChromeManager.Show();
+        }
+
+        private void Exit_Click()
+        {
+            App.Current.Shutdown();
+        }
         private void Timer_ShortBreakTick(object sender, EventArgs e)
         {
             NextShortBreak = $"{Timer.NextShortBreak.Hours}:{Timer.NextShortBreak.Minutes}:{Timer.NextShortBreak.Seconds}";

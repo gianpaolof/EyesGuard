@@ -263,3 +263,5 @@ __pycache__/
 # Setup Project
 /Setup Files/
 /.ionide
+/Source/EyesGuard/ViewModels/Interfaces/IEyesGuardTaskbarIconViewModel.cs
+/Source/EyesGuard/ViewModels/EyesGuardTaskbarIconViewModel.cs
