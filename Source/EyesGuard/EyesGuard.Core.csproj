@@ -1,0 +1,66 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <RootNamespace>EyesGuard</RootNamespace>
+    <AssemblyName>EyesGuard</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="obj\AzureDevOps\**" />
+    <Compile Remove="obj\Debug\**" />
+    <Compile Remove="obj\Release\**" />
+    <Compile Remove="out\**" />
+    <EmbeddedResource Remove="obj\AzureDevOps\**" />
+    <EmbeddedResource Remove="obj\Debug\**" />
+    <EmbeddedResource Remove="obj\Release\**" />
+    <EmbeddedResource Remove="out\**" />
+    <None Remove="obj\AzureDevOps\**" />
+    <None Remove="obj\Debug\**" />
+    <None Remove="obj\Release\**" />
+    <None Remove="out\**" />
+    <Page Remove="obj\AzureDevOps\**" />
+    <Page Remove="obj\Debug\**" />
+    <Page Remove="obj\Release\**" />
+    <Page Remove="out\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\Images\NonVectorIcons\Sheild-Paused.ico" />
+    <None Remove="Resources\Images\NonVectorIcons\Sheild-Protecting.ico" />
+    <None Remove="Resources\Images\NonVectorIcons\Shield-Stopped.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EyesGuard.Data\EyesGuard.Data.fsproj">
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="FontAwesome.WPF">
+      <HintPath>..\..\packages\FontAwesome.WPF\lib\net40\FontAwesome.WPF.dll</HintPath>
+      <Private>True</Private>
+      <Paket>True</Paket>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Hardcodet.Wpf.TaskbarNotification">
+      <HintPath>..\..\packages\Hardcodet.NotifyIcon.Wpf\lib\net451\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
+      <Private>True</Private>
+      <Paket>True</Paket>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\" />
+    <Folder Include="obj\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FormatWith" Version="2.2.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Composition" Version="16.3.7" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.0.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\NonVectorIcons\Sheild-Paused.ico" />
+    <Resource Include="Resources\Images\NonVectorIcons\Sheild-Protecting.ico" />
+    <Resource Include="Resources\Images\NonVectorIcons\Shield-Stopped.ico" />
+  </ItemGroup>
+</Project>

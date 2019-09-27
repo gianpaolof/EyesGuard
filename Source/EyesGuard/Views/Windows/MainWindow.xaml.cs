@@ -8,6 +8,8 @@ using EyesGuard.Views.Pages;
 using EyesGuard.Views.Windows.Interfaces;
 using System;
 using System.ComponentModel.Composition;
+using System.Reflection;
+using System.Runtime.Versioning;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -26,7 +28,8 @@ namespace EyesGuard.Views.Windows
 
             if (App.LaunchMinimized)
                 this.Hide();
-
+            string ver = Assembly.GetEntryAssembly().GetCustomAttribute<TargetFrameworkAttribute>().FrameworkName;
+            version.Text = ver;
         }
 
         [Import]
