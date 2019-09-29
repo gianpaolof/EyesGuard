@@ -36,8 +36,6 @@ namespace EyesGuard
         private void ComposeAssemblyCatalog()
         {
             Assembly ea = Assembly.GetExecutingAssembly();
-            string path = ea.Location;
-            List<Exception> exceptions = new List<Exception>();
             AggregateCatalog aggregateCatalog = new AggregateCatalog();
 
             aggregateCatalog.Catalogs.Add(new AssemblyCatalog(ea));
